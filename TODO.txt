@@ -1,0 +1,7 @@
+Todo list
+
+splash screen dialog - done
+Open comport after splash screen
+define dialog
+send data out serial port
+integrate data class
