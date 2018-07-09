@@ -91,6 +91,7 @@ private slots:
     void MenuCaptureRate500();
     void MenuCaptureRate1000();
     void MenuCaptureRate2000();
+    void MenuActDistance();
     void MenuActCopy();
     void MenuActHiVolt();
     void MenuActLoVolt();
@@ -109,6 +110,7 @@ private slots:
     void MenuActSave();
     void MenuActSettings();
     void MenuActUSC();
+    void MenuActVelocity();
 
     void SerialPortClose();
     void SerialPortHandleError(QSerialPort::SerialPortError error);
@@ -177,9 +179,11 @@ private:
     QAction *CaptureRate500Act;
     QAction *CaptureRate1000Act;
     QAction *CaptureRate2000Act;
+    QAction *DistanceAct;
     QAction *HiVoltAct;
     QAction *MeasureDistAct;
     QAction *MeasureVelAct;
+    QAction *MetricAct;
     QAction *PlotAct;
     QAction *PulseRate1Act;
     QAction *PulseRate3Act;
@@ -192,9 +196,8 @@ private:
     QAction *SavePicYesAct;
     QAction *SettingsAct;
     QAction *LoVoltAct;
-
     QAction *USCAct;
-    QAction *MetricAct;
+    QAction *VelocityAct;
 
     QActionGroup *AmpGainActGrp;
     QActionGroup *CaptureRateActGrp;

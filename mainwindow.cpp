@@ -44,6 +44,7 @@
 #include "console.h"
 #include "setting_dialog.h"
 
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QLabel>
 
@@ -303,6 +304,14 @@ void MainWindow::CreateActions()
     MetricAct->setChecked( false );
     connect( MetricAct, &QAction::triggered, this, &MainWindow::MenuActMetric);
 
+    DistanceAct = new QAction(tr("&Distance"), this);
+    saveAct->setStatusTip(tr("Set the Distance Between Transducers"));
+    connect(DistanceAct, &QAction::triggered, this, &MainWindow::MenuActDistance);
+
+    VelocityAct = new QAction(tr("&Velocity"), this);
+    saveAct->setStatusTip(tr("Set the Velocity Between Transducers"));
+    connect(VelocityAct, &QAction::triggered, this, &MainWindow::MenuActVelocity);
+
     UnitsActGrp = new QActionGroup( this );
     UnitsActGrp->addAction( USCAct );
     UnitsActGrp->addAction( MetricAct );
@@ -381,6 +390,10 @@ void MainWindow::CreateMenus()
     VoltMenu = ToolMenu->addMenu( tr( "&Voltage" ));
     VoltMenu->addAction( HiVoltAct );
     VoltMenu->addAction( LoVoltAct );
+
+    ToolMenu->addSeparator();
+    ToolMenu->addAction(DistanceAct);
+    ToolMenu->addAction(VelocityAct);
 
     ToolMenu->addSeparator();
     UnitsMenu = ToolMenu->addMenu( tr( "&Units" ));
@@ -602,6 +615,25 @@ void MainWindow::MenuActCopy()
     ShowStatusMessage( "Copy Data" );
 }
 
+/******************************************************************************
+
+  Function: MenuActDistance
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::MenuActDistance()
+{
+    bool ok = false;
+
+    ShowStatusMessage( "Transducer Distance Changed" );
+
+    double distance = QInputDialog::getDouble( this, tr("Distance"), tr("Requires a value between 0.1 and 600 feet "), 1 , 0.1, 600, 1, &ok );
+
+    if(ok) QMessageBox::information( this, tr("Distance"), ( QString("The Distance is %1 feet").arg(distance)));
+
+}
 /******************************************************************************
 
   Function: MenuActHiVolt
@@ -862,6 +894,27 @@ void MainWindow::MenuActSettings()
 void MainWindow::MenuActUSC()
 {
     ShowStatusMessage( "Change to US Customary Units" );
+}
+
+/******************************************************************************
+
+  Function: MenuActVelocity
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::MenuActVelocity()
+{
+    ShowStatusMessage( "Transducer Velocity Changed" );
+
+    bool ok = false;
+
+    double distance = QInputDialog::getDouble( this, tr("Velocity"), tr("Requires a Value Between 100 and 40000 feet per second"), 3000 , 100, 40000, 0, &ok );
+
+    if(ok)
+        QMessageBox::information( this, tr("Distance"), ( QString("The Velocity is %1 feet").arg(distance)));
+
 }
 
 /******************************************************************************
