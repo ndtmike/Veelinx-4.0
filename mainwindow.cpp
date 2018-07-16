@@ -69,10 +69,16 @@ MainWindow::MainWindow(QWidget *parent) :
     Serial = new QSerialPort(this);
     Plot = new QwtPlot;
     SettingDlg = new Setting_Dialog;
+    SerialTimeOut = new QTimer(this);
 
     CreateActions();
     CreateMenus();
     CreateStatusBar();
+    SerialCreateActions();
+
+//single shot timer connects after everyting is loaded.
+    QTimer* init_timer = new QTimer(this); //warning about being used?
+    init_timer->singleShot(1, this, SLOT( SerialCheckPort()));
 }
 
 MainWindow::~MainWindow()
@@ -353,7 +359,6 @@ void MainWindow::CreateMenus()
 
     ToolMenu = menuBar()->addMenu(tr("&Tool"));
     ToolMenu->addAction(PlotAct);
-//    ToolMenu->addAction(SettingsAct);
 
     ToolMenu->addSeparator();
     RunMenu = ToolMenu->addMenu(tr("&Run"));
@@ -967,6 +972,39 @@ void MainWindow::SerialCheckPort()
 
 /******************************************************************************
 
+  Function: SerialCreateActions
+
+  Description:
+  ============
+
+
+******************************************************************************/
+void MainWindow::SerialCreateActions()
+{
+    connect(Serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
+            SLOT(SerialPortHandleError(QSerialPort::SerialPortError)));
+    connect(Serial, SIGNAL(readyRead()), this, SLOT(SerialPortReadData()));
+    connect(SerialTimeOut,SIGNAL(timeout()), this,SLOT(SerialDataRecieved()));
+
+}
+
+/******************************************************************************
+
+  Function: SerialCreateActions
+
+  Description:
+  ============
+
+
+******************************************************************************/
+void MainWindow::SerialDataRecieved()
+{
+    QMessageBox::information(this, tr("Serial Port"), tr("End of Upload"));
+    SerialTimeOut->stop();
+}
+
+/******************************************************************************
+
   Function: SerialPortOpen
 
   Description:
@@ -976,7 +1014,8 @@ void MainWindow::SerialCheckPort()
 ******************************************************************************/
 void MainWindow::SerialPortOpen()
 {
-    Serial->setBaudRate(9600);
+    const int baudrate = 9600;
+    Serial->setBaudRate( baudrate );
     Serial->setDataBits(QSerialPort::Data8);
     Serial->setParity(QSerialPort::NoParity);
     Serial->setStopBits(QSerialPort::OneStop);
@@ -1021,8 +1060,11 @@ void MainWindow::SerialPortClose()
 ******************************************************************************/
 void MainWindow::SerialPortReadData()
 {
+    const int timeouttime = 200; //200 mSec after the last character it shoudl stop
+
     QByteArray data = Serial->readAll();
     SerialConsole->putData(data);
+    SerialTimeOut->start( timeouttime );
 }
 
 /******************************************************************************

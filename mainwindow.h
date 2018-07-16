@@ -47,6 +47,7 @@
 #include <QMainWindow>
 #include <QtSerialPort/QSerialPort>
 #include <QSerialPortInfo>
+#include <QTimer>
 #include <QtWidgets>
 
 #include <qwt_plot.h>
@@ -112,6 +113,8 @@ private slots:
     void MenuActUSC();
     void MenuActVelocity();
 
+    void SerialCheckPort();
+    void SerialDataRecieved();
     void SerialPortClose();
     void SerialPortHandleError(QSerialPort::SerialPortError error);
     void SerialPortOpen();
@@ -139,10 +142,10 @@ private:
     void CreateActions();
     void CreateMenus();
     void CreateStatusBar();
+    void SerialCreateActions();
 
     SerialSettings CurrentSerialSettings;
 
-    void SerialCheckPort();
     void ShowStatusMessage( QString message );
 
     QMenu *AmpGainMenu;
@@ -212,6 +215,7 @@ private:
 
     QwtPlot *Plot;
     QSerialPort *Serial;
+    QTimer *SerialTimeOut;
     Console *SerialConsole;
     Setting_Dialog *SettingDlg;
     QLabel *Status;

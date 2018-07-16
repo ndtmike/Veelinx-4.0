@@ -2,6 +2,24 @@ Todo list
 
 splash screen dialog - done
 Open comport after splash screen
-define dialog
+define dialog - used Menu
 send data out serial port
 integrate data class
+
+1. The program itself loaded on my PC (Windows 7 Pro), but the user needs to close the program immediately, and restart it using the desktop icon. Otherwise the program will not work and the following message is displayed... (see p14 below)
+
+"Failed to write the data to port error. Device not open."
+
+(Btw... The desktop icon says Veelinx, but shows Windsor in the icon image. This is seen everywhere the Veelinx icon is located.)
+
+2. The user can adjust the V-Meter parameters within the Veelinx software, but they MUST press OK for the parameters to be loaded onto the unit. (see p16 below)
+
+3. After changing any of the parameters, the "Dialog" message - Upload in Progress appears on the Veelinx screen, and does not leave unless the user cancels the Dialog. It appears to be some kind of default screen within Veelinx. (See p19 below)
+
+4. The Test Data can only be uploaded to a PC one file at a time. If the user attempts to upload a second file, they must exit the program and restart. (My guess is that the data stack is not refreshed w/o doing the restart of the program. Thus, the user needs to exit and restart the program for each file they upload.) (see p22 below)
+
+(Note: when the user presses OK here. The program automatically closes, and must be restarted. Also, while the Upload is happening, the V-Meter screen shows the VMtr Upload image below.)
+
+5. After Uploading a file, the "endUpload" / Upload Complete message is displayed on the screen with a rolling ball icon (or wait/working indicator). This rolling ball does not go away even after several minutes... after the data is uploaded to the PC. This ball stays on the screen until the user moves it to the OK button and right clicks over it. (Note: The upload itself appears to take only a few seconds (5-10). So I'm not sure why this does not change to an arrow image once the upload is complete???)
+
+
