@@ -68,7 +68,7 @@ QT_END_NAMESPACE
 
 class Console;
 class Setting_Dialog;
-
+class InstData;
 
 class MainWindow : public QMainWindow
 {
@@ -109,7 +109,7 @@ private slots:
     void MenuActSaveDataNo();
     void MenuActSaveDataYes();
     void MenuActSave();
-    void MenuActSettings();
+//    void MenuActSettings();
     void MenuActUSC();
     void MenuActVelocity();
 
@@ -213,11 +213,11 @@ private:
     QActionGroup *VoltageActGrp;
     QActionGroup *UnitsActGrp;
 
+    InstData *CurrentData;
     QwtPlot *Plot;
     QSerialPort *Serial;
     QTimer *SerialTimeOut;
     Console *SerialConsole;
-    Setting_Dialog *SettingDlg;
     QLabel *Status;
 };
 

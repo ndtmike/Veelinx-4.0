@@ -16,12 +16,12 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     console.cpp \
-    setting_dialog.cpp
+    instdata.cpp
 
 HEADERS += \
     mainwindow.h \
     console.h \
-    setting_dialog.h
+    instdata.h
 
 CONFIG += \
     C++11 \

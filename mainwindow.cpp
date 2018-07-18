@@ -43,6 +43,7 @@
 #include "mainwindow.h"
 #include "console.h"
 #include "setting_dialog.h"
+#include "instdata.h"
 
 #include <QInputDialog>
 #include <QMessageBox>
@@ -66,10 +67,11 @@ MainWindow::MainWindow(QWidget *parent) :
     SerialConsole = new Console;
     SerialConsole->setEnabled(false);
     setCentralWidget(SerialConsole);
+
     Serial = new QSerialPort(this);
     Plot = new QwtPlot;
-    SettingDlg = new Setting_Dialog;
     SerialTimeOut = new QTimer(this);
+    CurrentData = new InstData();
 
     CreateActions();
     CreateMenus();
@@ -125,10 +127,6 @@ void MainWindow::CreateActions()
     PlotAct = new QAction(tr("&Plot"), this);
     PlotAct->setStatusTip(tr("Plots the Data Uploaded"));
     connect(PlotAct, &QAction::triggered, this, &MainWindow::MenuActPlot);
-
-    SettingsAct = new QAction(tr("&Settings"), this);
-    SettingsAct->setStatusTip(tr("Sets V-Meter Settings"));
-    connect( SettingsAct, &QAction::triggered, this, &MainWindow::MenuActSettings);
 
     RunNoAct = new QAction(tr("No"), this);
     RunNoAct->setStatusTip(tr("Stop V-Meter"));
@@ -322,13 +320,13 @@ void MainWindow::CreateActions()
     UnitsActGrp->addAction( USCAct );
     UnitsActGrp->addAction( MetricAct );
 
-    aboutAct = new QAction(tr("&About"), this);
-    aboutAct->setStatusTip(tr("Show the application's About box"));
-    connect(aboutAct, &QAction::triggered, this, &MainWindow:: MenuActAbout);
+    aboutAct = new QAction( tr("&About"), this);
+    aboutAct->setStatusTip( tr("Show the application's About box") );
+    connect( aboutAct, &QAction::triggered, this, &MainWindow:: MenuActAbout );
 
-    aboutQtAct = new QAction(tr("About &Qt"), this);
-    aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
-    connect(aboutQtAct, &QAction::triggered, qApp, &QApplication::aboutQt);
+    aboutQtAct = new QAction( tr("About &Qt"), this);
+    aboutQtAct->setStatusTip( tr("Show the Qt library's About box") );
+    connect( aboutQtAct, &QAction::triggered, qApp, &QApplication::aboutQt );
 
     connect(Serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
             this, &MainWindow::SerialPortHandleError);
@@ -881,13 +879,13 @@ void MainWindow::MenuActSave()
   ============
 
 
-******************************************************************************/
+*****************************************************************************
 void MainWindow::MenuActSettings()
 {
     ShowStatusMessage( "Settings" );
-    SettingDlg->show();
+//    SettingDlg->show();
 }
-
+*/
 /******************************************************************************
 
   Function: MenuActMetric
