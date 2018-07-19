@@ -85,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-
+    SerialPortClose();
 }
 /******************************************************************************
 
@@ -871,21 +871,7 @@ void MainWindow::MenuActSave()
     ShowStatusMessage( tr( "Save File" ));
 }
 
-/******************************************************************************
 
-  Function: MenuActSave
-
-  Description:
-  ============
-
-
-*****************************************************************************
-void MainWindow::MenuActSettings()
-{
-    ShowStatusMessage( "Settings" );
-//    SettingDlg->show();
-}
-*/
 /******************************************************************************
 
   Function: MenuActMetric
@@ -997,8 +983,11 @@ void MainWindow::SerialCreateActions()
 ******************************************************************************/
 void MainWindow::SerialDataRecieved()
 {
+    QString uploadeddata = SerialConsole->toPlainText();
+
     QMessageBox::information(this, tr("Serial Port"), tr("End of Upload"));
     SerialTimeOut->stop();
+    CurrentData->AddTest( uploadeddata );
 }
 
 /******************************************************************************

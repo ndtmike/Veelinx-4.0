@@ -50,8 +50,6 @@ Console::Console(QWidget *parent)
     : QPlainTextEdit(parent)
     , localEchoEnabled(false)
 {
-//    const int maxblockcount = 1000;
-//    document()->setMaximumBlockCount(maxblockcount);
     QPalette p = palette();
     p.setColor(QPalette::Base, Qt::black);
     p.setColor(QPalette::Text, Qt::green);
@@ -62,7 +60,6 @@ Console::Console(QWidget *parent)
 void Console::putData(const QByteArray &data)
 {
     insertPlainText(QString(data));
-
     QScrollBar *bar = verticalScrollBar();
     bar->setValue(bar->maximum());
 }

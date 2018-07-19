@@ -3,59 +3,55 @@
 ** support, and with no warranty, express or implied, as to its usefulness for
 ** any purpose.
 **
-** File Name: Inst_Data.h
+** File Name: Instdata.h
 **
-** Header file for parser.cpp - Veelinx software
+** Header file for instdata.cpp - Veelinx software
 **
 ** Author: Michael W. Hoag
-** Copyright Michael W. Hoag 2017
+** Copyright Michael W. Hoag 2018
 ** Email: mike@ndtjames.com
 ** -------------------------------------------------------------------------*/
 
 #ifndef INST_DATA_H
 #define INST_DATA_H
 
-//#include <math.h>
+//#include <math.h>  this was double defined not really sure where the original is defined?
 #include <vector>
 #include <string>
 #include <ctime>
 #include <algorithm>
 #include <functional>
 
-#include <QObject>
+#include <QDateTime>
+#include <QRegExp>
+#include <QString>
+#include <QStringList>
+#include <QVector>
 
-/* ---------------------------------------------------------------------------
-** Holds the data for each test as well as each tests properties in a vector.
-** The class does not 'code/decode' the data to strings that is assumed to happen
-** in the QT interface. Thus allowing ease in translation.
-** -------------------------------------------------------------------------*/
-
-class InstData//:QObject
+class InstData
 {
-//    Q_OBJECT
 public:
-    enum AmpGain{ Gain_1 = 0, Gain_5, Gain_10, Gain_25, Gain_50, Gain_100, Gain_250, Gain_500 };
-    enum EMethod{ ArbMu = 0, DerivedMu, SimpleE };
+    enum AmpGain{ Gain_1 = 1, Gain_5 = 5, Gain_10 = 10, Gain_25 = 25, Gain_50 = 50, Gain_100 = 100, Gain_250 = 250, Gain_500 = 500 };
     enum Calc{ Distance, Velocity };
+    enum EMethod{ ArbMu = 0, DerivedMu, SimpleE };
     enum Pulse{ PulsePerSeq_1 = 1, PulsePerSeq_3 = 3, PulsePerSeq_10 = 10};
-    enum Rate{ RATE_250KHZ = 0, RATE_500KHZ, RATE_1000KHZ, RATE_2000KHZ };
-    enum Units{ Imperial = 0, Metric};
+    enum CaptureRate{ RATE_250KHZ = 250, RATE_500KHZ = 500, RATE_1000KHZ = 1000 , RATE_2000KHZ = 2000 };
+    enum Units{ USC = 0, Metric};
     enum Voltage{ Low = 0, Hi };
     enum Wave{ PWave = 0, SWave };
 
     struct Properties{ //material property parameters for Windsor Probe
         AmpGain PropAmpGain;
         Calc PropCalc;
-        Rate PropCaptureRate;
+        CaptureRate PropCaptureRate;
         unsigned PropCycleTime;
         bool PropDataSave;
         unsigned PropDensity;
         EMethod PropEMethod;
-        Calc PropMeaseMode;
+        bool PropPicSave;
         unsigned PropPTravelDistance;
         unsigned PropPTravelVelocity;
         bool PropRun;
-        bool PropPicSave;
         Pulse PropPulseRate;
         Wave PropWave;
         Units PropUnits;
@@ -63,10 +59,10 @@ public:
     };
 
     struct Test{
-        std::vector<long> ADC;
+        QVector<long> ADC;
         double TransitTime;
         Properties TestProp;
-        tm TestTime;
+        QDateTime TestTime;
         unsigned TestNumber;
     };
 
@@ -74,7 +70,7 @@ public:
 //    InstData( Test Init_Test ); //constructor!!
 
     void AddTest( Test test );
-    void AddTest( QByteArray array );
+    void AddTest( QString rawdata );
     Test GetTest( std::vector<Test>::iterator itr_current );
     std::vector<Test>::iterator GetBeginItr();
     std::vector<Test>::iterator GetEndItr();
@@ -84,6 +80,12 @@ private:
     std::vector <Test> TestData;
     static double MMtoInch(void){return(25.4);}
     static double MPAtoPSI(void){return(145.0);}
+
+    QDateTime CreateDateTime( QString rawtest );
+    Properties CreateProperties( QStringList rawproperties );
+    Test CreateTest( QStringList rawtest);
+    unsigned CreateTestNumber( QString rawtest );
+    double CreateTransitTime( QString rawtest );
 
 };
 
