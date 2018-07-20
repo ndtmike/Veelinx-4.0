@@ -57,23 +57,22 @@ void InstData::AddTest(QString rawdata)
     const QString const_james = "James Instruments V-METER MK IV";
     const QString const_end = "End";
     QStringList working;
-//    QVector<QStringList> individualtestdatavector;
 
     QStringList::const_iterator constIterator;
     for( constIterator = rawdatalist.constBegin(); constIterator != rawdatalist.constEnd(); ++constIterator )
     {
         if( (*constIterator) == const_james )
         {
-            for(;(*constIterator) != const_end; ++constIterator)
+            for(;(*constIterator) != const_end && constIterator != rawdatalist.constEnd(); ++constIterator)
             {
                 working << (*constIterator);
             }
-//        individualtestdatavector.append( working );
             CreateTest( working );
         }
         working.clear();
     }
 }
+
 /******************************************************************************
 
   Function: CreateDateTime
@@ -85,7 +84,16 @@ void InstData::AddTest(QString rawdata)
 ******************************************************************************/
 QDateTime InstData::CreateDateTime( QString rawtest )
 {
+    QDateTime testtime;
+    QString strdata;
+    QString format = "mm/dd/yy hh:mm:ss AP";
+    QRegExp testdatetime("*Test Date/Time:*");
+    testdatetime.setPatternSyntax( QRegExp::Wildcard);
 
+    strdata = rawtest.right( rawtest.indexOf(testdatetime )+15 );
+    testtime = QDateTime::fromString( strdata, format );
+
+    return(testtime);
 }
 
 /******************************************************************************
@@ -100,7 +108,7 @@ QDateTime InstData::CreateDateTime( QString rawtest )
 InstData::Properties InstData::CreateProperties( QStringList rawproperties )
 {
     Properties return_property;
-    const QString const_end = "Young's";
+    unsigned index;
 
     return_property.PropAmpGain = AmpGain::Gain_1;
     return_property.PropCalc = Calc::Velocity;
@@ -117,21 +125,33 @@ InstData::Properties InstData::CreateProperties( QStringList rawproperties )
     return_property.PropUnits = Units::USC;
     return_property.PropVoltage = Voltage::Low;
 
-/*    QStringList::const_iterator constIterator;
-    for( constIterator = rawdatalist.constBegin(); constIterator != rawdatalist.constEnd(); ++constIterator )
-    {
-        if( (constIterator-> ) == const_james )
-        {
-            for(;(*constIterator) != const_end; ++constIterator)
-            {
-                working << (*constIterator);
-            }
-//        individualtestdatavector.append( working );
-            CreateTest( working );
-        }
-        working.clear();
-    }
-*/
+//Determine PropCalc Set & PropPTravelDistance/Velocity Metric/USC
+    QRegExp calc("*SET P-Distance*");
+    calc.setPatternSyntax( QRegExp::Wildcard);
+    index = rawproperties.indexOf(calc);
+    return_property.PropCalc = index == -1? Calc::Velocity : Calc::Distance;
+
+    QRegExp metric("*feet/second*");
+    metric.setPatternSyntax( QRegExp::Wildcard);
+    index = rawproperties.indexOf(metric);
+    return_property.PropUnits = index == -1? Units::Metric : Units::USC;
+
+//Determine Capture Rate
+
+//Detemine  Gain
+
+//Determine Density
+
+//Wave Type
+    QRegExp wavetype("*P-*");
+    wavetype.setPatternSyntax( QRegExp::Wildcard);
+    index = rawproperties.indexOf(wavetype);
+    return_property.PropWave = index == -1? Wave::SWave : Wave::PWave;
+//EMethod
+
+//Mu?
+
+
     return( return_property );
 }
 
@@ -149,14 +169,24 @@ InstData::Test InstData::CreateTest(QStringList rawtest)
     Test return_test;
     QStringList::const_iterator rawtestiterator;
     QString workingstring;
+    int index = -1;
+    QRegExp test("*Test:*");
+    test.setPatternSyntax( QRegExp::Wildcard);
+    QRegExp testdatetime("*Test Date/Time:*");
+    testdatetime.setPatternSyntax( QRegExp::Wildcard);
+    QRegExp transittime("*Transit Time:*");
+    transittime.setPatternSyntax( QRegExp::Wildcard);
 
-    workingstring = rawtest.at( rawtest.indexOf("Test:"));
+    index = rawtest.indexOf(test);  //regular expression
+    workingstring = rawtest.at( index );
     return_test.TestNumber = CreateTestNumber( workingstring );
 
-    workingstring = rawtest.at( rawtest.indexOf("Test Date/Time:"));
+    index = rawtest.indexOf(testdatetime);  //regular expression
+    workingstring = rawtest.at( index );
     return_test.TestTime = CreateDateTime( workingstring );
 
-    workingstring = rawtest.at( rawtest.indexOf("Transit Time:" ));
+    index = rawtest.indexOf(testdatetime);  //regular expression
+    workingstring = rawtest.at( index );
     return_test.TransitTime = CreateTransitTime( workingstring );
 
     return_test.TestProp = CreateProperties( rawtest );
@@ -175,7 +205,14 @@ InstData::Test InstData::CreateTest(QStringList rawtest)
 ******************************************************************************/
 unsigned InstData::CreateTestNumber( QString rawtest )
 {
+    QString strdata;
+    const unsigned numberwidth = 8;
+    unsigned testnumber;
+    bool ok = false;
 
+    strdata = rawtest.mid( rawtest.indexOf(':')+1, numberwidth );
+    testnumber = strdata.toInt( &ok );
+    return( testnumber );
 }
 
 /******************************************************************************
@@ -189,7 +226,14 @@ unsigned InstData::CreateTestNumber( QString rawtest )
 ******************************************************************************/
 double InstData::CreateTransitTime( QString rawtest )
 {
+    double testtransittime = 0.00;
+    QString strdata;
+    const unsigned numberwidth = 8;
+    bool ok = false;
 
+    strdata = rawtest.mid( rawtest.indexOf(':')+1, numberwidth );
+    testtransittime = strdata.toDouble( &ok );
+    return( testtransittime );
 }
 
 /******************************************************************************
