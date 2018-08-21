@@ -49,8 +49,8 @@ public:
         unsigned PropDensity;
         EMethod PropEMethod;
         bool PropPicSave;
-        unsigned PropPTravelDistance;
-        unsigned PropPTravelVelocity;
+        double PropDistance;
+        double PropVelocity;
         bool PropRun;
         Pulse PropPulseRate;
         Wave PropWave;
@@ -81,11 +81,14 @@ private:
     static double MMtoInch(void){return(25.4);}
     static double MPAtoPSI(void){return(145.0);}
 
+    AmpGain CreateAmpGain( QStringList rawproperties);
+    Properties CreateCalc( QStringList rawdata, Properties rawproperties );
+    CaptureRate CreateCaptureRate( QStringList rawproperties );
     QDateTime CreateDateTime( QString rawtest );
     Properties CreateProperties( QStringList rawproperties );
     Test CreateTest( QStringList rawtest);
     unsigned CreateTestNumber( QString rawtest );
-    double CreateTransitTime( QString rawtest );
+    double CreateTransitTime( QStringList rawtest );
 
 };
 
