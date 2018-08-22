@@ -73,13 +73,14 @@ public:
 
     void AddTest( Test test );
     void AddTest( QString rawdata );
-    Test GetTest( std::vector<Test>::iterator itr_current );
-    std::vector<Test>::iterator GetBeginItr();
-    std::vector<Test>::iterator GetEndItr();
+    Test GetTest( QVector<Test>::iterator itr_current );
+    QStringList GetTest( unsigned gettestnumber, bool* ok );
+    QVector<Test>::iterator GetBeginItr();
+    QVector<Test>::iterator GetEndItr();
 
 private:
 
-    std::vector <Test> TestData;
+    QVector <Test> TestData;
     static double MMtoInch(void){return(25.4);}
     static double MPAtoPSI(void){return(145.0);}
 
@@ -94,6 +95,15 @@ private:
     unsigned CreateTestNumber( QString rawtest );
     double CreateTransitTime( QStringList rawtest );
 
+    QStringList GetADC( Test* workingtest );
+    QString GetAmpGain( Test* workingtest );
+    QStringList GetCalc( Test* workingtest );
+    QString GetCaptureRate( Test* workingtest );
+    QString GetDateTime( Test* workingtest );
+    QString GetDensity( Test* workingtest );
+    QString GetE( Test* workingTest );
+    QString GetTestNumber( Test* workingtest );
+    QString GetTransitTime( Test* workingtest );
 };
 
 #endif // INST_DATA_H

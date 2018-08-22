@@ -67,7 +67,7 @@ void InstData::AddTest(QString rawdata)
             {
                 working << (*constIterator);
             }
-            CreateTest( working );
+            TestData.append( CreateTest( working ));
         }
         working.clear();
     }
@@ -539,13 +539,183 @@ double InstData::CreateTransitTime( QStringList rawtest )
 
 /******************************************************************************
 
+  Function: GetADC
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QStringList InstData::GetADC( Test* workingtest )
+{
+    QStringList returnlist;
+    QString adcstring;
+
+    for( QVector<long>::iterator i = workingtest->ADC.begin(); i != workingtest->ADC.end(); ++i ){
+        adcstring = QString::number( (*i), 10 );
+        returnlist.append(adcstring);
+    }
+    return( returnlist );
+}
+
+/******************************************************************************
+
+  Function: GetAmpGain
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QString InstData::GetAmpGain( Test* workingtest )
+{
+    QString returnvariable = "50";
+    AmpGain workingvariable = workingtest->TestProp.PropAmpGain;
+
+    /*TODO fill with if statements*/
+
+    return( returnvariable );
+}
+
+/******************************************************************************
+
+  Function: GetCalc
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QStringList InstData::GetCalc( Test* workingtest )
+{
+    QString measured = "Measured: ";
+    QString set = "Set: ";
+    QStringList returnvariable;
+    Calc workingvariable = workingtest->TestProp.PropCalc;
+
+    /*TODO fill with if statements*/
+
+    returnvariable.append( set );
+    returnvariable.append( measured );
+
+    return( returnvariable );
+}
+
+/******************************************************************************
+
+  Function: GetCaptureRate
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QString InstData::GetCaptureRate( Test* workingtest )
+{
+    QString returnvariable = "Rate: 500 kHz";
+    CaptureRate workingvariable = workingtest->TestProp.PropCaptureRate;
+
+    /*TODO fill with if statements*/
+
+    return( returnvariable );
+}
+
+/******************************************************************************
+
+  Function: GetDateTime
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QString InstData::GetDateTime( Test* workingtest )
+{
+    QString returnvariable = "01/01/2001 00:00:01";
+    QDateTime workingvariable = workingtest->TestTime;
+
+    /*TODO fill with format statements*/
+
+    return( returnvariable );
+}
+
+/******************************************************************************
+
+  Function: GetDensity
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QString InstData::GetDensity( Test* workingtest )
+{
+    QString returnvariable = "Density: 50";
+    double workingvariable = workingtest->TestProp.PropDensity;
+
+    /*TODO fill with format statements*/
+
+    return( returnvariable );
+}
+
+/******************************************************************************
+
+  Function: GetE
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QString InstData::GetE( Test* workingtest )
+{
+    QString returnvariable = "Simple";
+    double workingvariable = workingtest->TestProp.PropE;
+
+    /*TODO fill with format statements*/
+
+    return( returnvariable );
+}
+
+/******************************************************************************
+
+  Function: GetTestNumber
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QString InstData::GetTestNumber( Test* workingtest )
+{
+    QString returnvariable = "Test Number: ";
+    unsigned workingvariable = workingtest->TestNumber;
+
+    returnvariable = returnvariable + QString::number( workingvariable, 10);
+
+    return( returnvariable );
+}
+
+/******************************************************************************
+
+  Function: GetTranistTime
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QString InstData::GetTransitTime( Test* workingtest )
+{
+    QString returnvariable = "Test Transit Time: ";
+    QString secondsstr = " Seconds";
+    double workingvariable = workingtest->TransitTime;
+
+    returnvariable = returnvariable + QString::number( workingvariable, 'g', 5 ) + secondsstr;
+
+    return( returnvariable );
+}
+
+/******************************************************************************
+
   Function: GetBeginItr
   Description:
   ============
   Access Iterator
 
 ******************************************************************************/
-std::vector<InstData::Test>::iterator InstData::GetBeginItr()
+QVector<InstData::Test>::iterator InstData::GetBeginItr()
 {
     return( TestData.begin() );
 }
@@ -558,7 +728,7 @@ std::vector<InstData::Test>::iterator InstData::GetBeginItr()
   Access Iterator
 
 ******************************************************************************/
-std::vector<InstData::Test>::iterator InstData::GetEndItr()
+QVector<InstData::Test>::iterator InstData::GetEndItr()
 {
     return( TestData.end() );
 }
@@ -573,8 +743,48 @@ std::vector<InstData::Test>::iterator InstData::GetEndItr()
   Access Function
 
 ******************************************************************************/
-InstData::Test InstData::GetTest(std::vector<Test>::iterator itr_current)
+InstData::Test InstData::GetTest(QVector<Test>::iterator itr_current)
 {
     Test returntest = *itr_current;
     return(returntest);
+}
+
+/******************************************************************************
+
+  Function: GetTest
+
+  Description:
+  ============
+  Access Function overload to return a QStringList
+
+******************************************************************************/
+QStringList InstData::GetTest( unsigned gettestnumber, bool* ok )
+{
+    QStringList returnlist;
+    QString adcstring;
+    QString header1 = "James Instruments V-METER MK IV Data";
+    QString header2 = "Veelinx 4.0 copyright 2018";
+    QString testnumdatetime;
+
+    (*ok) = false;
+    QVector<Test>::iterator i;
+    for(  i = TestData.begin(); i != TestData.end(); ++i ){
+        if( (*i).TestNumber == gettestnumber ){
+            (*ok) = true;
+            break;
+        }
+    }
+
+    testnumdatetime = GetTestNumber(i) + GetDateTime( i );
+
+    returnlist.append( header1 );
+    returnlist.append( header2 );
+    returnlist.append( testnumdatetime );
+    returnlist.append( GetTransitTime( i ));
+    returnlist.append( GetCalc( i ));
+//    returnlist.append( );
+
+    returnlist.append( GetADC( i ));
+
+    return( returnlist );
 }
