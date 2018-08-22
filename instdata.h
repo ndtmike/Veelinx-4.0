@@ -46,10 +46,12 @@ public:
         CaptureRate PropCaptureRate;
         unsigned PropCycleTime;
         bool PropDataSave;
-        unsigned PropDensity;
-        EMethod PropEMethod;
-        bool PropPicSave;
+        double PropDensity;
         double PropDistance;
+        double PropE;
+        EMethod PropEMethod;
+        double PropMu;
+        bool PropPicSave;
         double PropVelocity;
         bool PropRun;
         Pulse PropPulseRate;
@@ -85,6 +87,8 @@ private:
     Properties CreateCalc( QStringList rawdata, Properties rawproperties );
     CaptureRate CreateCaptureRate( QStringList rawproperties );
     QDateTime CreateDateTime( QString rawtest );
+    double CreateDensity( QStringList rawdata );
+    Properties CreateE( QStringList* rawlist, Properties* rawproperties );
     Properties CreateProperties( QStringList rawproperties );
     Test CreateTest( QStringList rawtest);
     unsigned CreateTestNumber( QString rawtest );

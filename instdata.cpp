@@ -97,55 +97,52 @@ InstData::AmpGain InstData::CreateAmpGain( QStringList rawproperties )
 
     QRegExp regexp( gain_500 );
     regexp.setPatternSyntax( QRegExp::Wildcard);
-
     int index = rawproperties.indexOf( regexp );
-
     if( index != -1 ){ //determine the rate
         return_property = AmpGain::Gain_500;
-    }else{
-        regexp.setPattern( gain_250 );
-        index = rawproperties.indexOf( regexp );
-        if( index != -1 ){
-            return_property = AmpGain::Gain_250;
-        }else{
-            regexp.setPattern( gain_100 );
-            index = rawproperties.indexOf( regexp );
-            if( index != -1 ){
-                return_property = AmpGain::Gain_100;
-            }else{
-                regexp.setPattern( gain_50 );
-                index = rawproperties.indexOf( regexp );
-                if( index != -1 ){
-                    return_property = AmpGain::Gain_50;
-                }else{
-                    regexp.setPattern( gain_25 );
-                    index = rawproperties.indexOf( regexp );
-                    if( index != -1 ){
-                        return_property = AmpGain::Gain_25;
-                    }else{
-                        regexp.setPattern( gain_10 );
-                        index = rawproperties.indexOf( regexp );
-                        if( index != -1 ){
-                            return_property = AmpGain::Gain_10;
-                        }else{
-                            regexp.setPattern( gain_5 );
-                            index = rawproperties.indexOf( regexp );
-                            if( index != -1 ){
-                                return_property = AmpGain::Gain_5;
-                            }else{
-                                regexp.setPattern( gain_1 );
-                                index = rawproperties.indexOf( regexp );
-                                if( index != -1 ){
-                                    return_property = AmpGain::Gain_1;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
+    regexp.setPattern( gain_250 );
+    index = rawproperties.indexOf( regexp );
+    if( index != -1 ){
+            return_property = AmpGain::Gain_250;
+    }
+
+    regexp.setPattern( gain_100 );
+    index = rawproperties.indexOf( regexp );
+    if( index != -1 ){
+                return_property = AmpGain::Gain_100;
+    }
+
+    regexp.setPattern( gain_50 );
+    index = rawproperties.indexOf( regexp );
+    if( index != -1 ){
+        return_property = AmpGain::Gain_50;
+    }
+
+    regexp.setPattern( gain_25 );
+    index = rawproperties.indexOf( regexp );
+    if( index != -1 ){
+        return_property = AmpGain::Gain_25;
+    }
+
+    regexp.setPattern( gain_10 );
+    index = rawproperties.indexOf( regexp );
+    if( index != -1 ){
+        return_property = AmpGain::Gain_10;
+    }
+
+    regexp.setPattern( gain_5 );
+    index = rawproperties.indexOf( regexp );
+    if( index != -1 ){
+        return_property = AmpGain::Gain_5;
+    }
+
+    regexp.setPattern( gain_1 );
+    index = rawproperties.indexOf( regexp );
+    if( index != -1 ){
+        return_property = AmpGain::Gain_1;
+    }
     return( return_property );
 }
 
@@ -180,8 +177,9 @@ InstData::Properties InstData::CreateCalc( QStringList rawdata, InstData::Proper
     QString setstring = rawdata.at( setindex );
     QString measuredstring = rawdata.at ( measuredindex );
 
-    int numstart = setstring.indexOf(":");
-    setstring = setstring.right( numstart - 2 );
+    int numstart = setstring.indexOf(":")+1;
+    int setstringright = setstring.size() - numstart;
+    setstring = setstring.right( setstringright );
     for(int i = 0; i < setstring.size() ; ++i ){
         if( setstring.at(i).isLetter() == true ){
             setstring = setstring.left( i );
@@ -189,8 +187,9 @@ InstData::Properties InstData::CreateCalc( QStringList rawdata, InstData::Proper
         }
     }
 
-    numstart = measuredstring.indexOf(":");
-    measuredstring = measuredstring.right( numstart - 2 );
+    numstart = measuredstring.indexOf(":")+1;
+    int measurestringright = measuredstring.size() - numstart;
+    measuredstring = measuredstring.right( measurestringright );
     for(int i = 0; i < measuredstring.size() ; ++i ){
         if( measuredstring.at(i).isLetter() == true ){
             measuredstring = measuredstring.left( i );
@@ -236,24 +235,24 @@ InstData::CaptureRate InstData::CreateCaptureRate( QStringList rawproperties )
 
     if( index != -1 ){ //determine the rate
         return_property = CaptureRate::RATE_2000KHZ;
-    }else{
-        capturerate.setPattern( rate_1000khz );
-        index = rawproperties.indexOf( capturerate );
-        if( index != -1 ){
-            return_property = CaptureRate::RATE_1000KHZ;
-        }else{
-            capturerate.setPattern( rate_500khz );
-            index = rawproperties.indexOf( capturerate );
-            if( index != -1 ){
-                return_property = CaptureRate::RATE_500KHZ;
-            }else{
-                capturerate.setPattern( rate_250khz );
-                index = rawproperties.indexOf( capturerate );
-                if( index != -1 ){
-                    return_property = CaptureRate::RATE_250KHZ;
-                }
-            }
-        }
+    }
+
+    capturerate.setPattern( rate_1000khz );
+    index = rawproperties.indexOf( capturerate );
+    if( index != -1 ){
+        return_property = CaptureRate::RATE_1000KHZ;
+    }
+
+    capturerate.setPattern( rate_500khz );
+    index = rawproperties.indexOf( capturerate );
+    if( index != -1 ){
+        return_property = CaptureRate::RATE_500KHZ;
+    }
+
+    capturerate.setPattern( rate_250khz );
+    index = rawproperties.indexOf( capturerate );
+    if( index != -1 ){
+        return_property = CaptureRate::RATE_250KHZ;
     }
 
     return( return_property );
@@ -285,6 +284,99 @@ QDateTime InstData::CreateDateTime( QString rawtest )
     testtime = testtime.addYears( convertonehundred ); //convert to 2000's
 
     return( testtime );
+}
+
+/******************************************************************************
+
+  Function: CreateDensity
+
+  Description:
+  ============
+
+
+******************************************************************************/
+double InstData::CreateDensity( QStringList rawdata )
+{
+    double result = 0.0;
+    QRegExp qrdensity( "*Density:*" ); //find the right QString
+    const QString density( "Density:");
+    qrdensity.setPatternSyntax( QRegExp::Wildcard );
+    int densityindex = rawdata.indexOf( qrdensity );
+
+    QString densitystring = rawdata.at( densityindex );//fill the distance velocity doubles
+    int numstart = densitystring.indexOf( density );
+    int rightsize = densitystring.size() - numstart - density.size();
+    densitystring = densitystring.right( rightsize );
+    for(int i = 0; i < densitystring.size() ; ++i ){
+        if( densitystring.at(i).isLetter() == true ){
+            densitystring = densitystring.left( i );
+            break;
+        }
+    }
+
+    bool ok = false;
+    result = densitystring.toDouble( &ok );
+
+    return( result );
+}
+
+/******************************************************************************
+
+  Function: CreateE
+
+  Description:
+  ============
+
+
+******************************************************************************/
+InstData::Properties InstData::CreateE( QStringList* rawdata, Properties* rawproperties )
+{
+    QRegExp qre( "*Young's modulus:*" ); //find the right QString for E!!
+    const QString e( "Young's modulus:");
+    qre.setPatternSyntax( QRegExp::Wildcard );
+    int eindex = rawdata->indexOf( qre );
+
+    QString estring = rawdata->at( eindex );//fill the distance velocity doubles
+    int numstart = estring.indexOf( e );
+    int rightsize = estring.size() - numstart - e.size();
+    estring = estring.right( rightsize );
+    for(int i = 0; i < estring.size() ; ++i ){
+        if( estring.at(i).isLetter() == true ){
+            estring = estring.left( i );
+            break;
+        }
+    }
+
+    bool ok = false;
+    rawproperties->PropE = estring.toDouble( &ok );
+
+    QRegExp qrep( "*Young's modulus:*" ); //find the right QString for E!!
+    const QString p( "Poisson's ratio:");
+    qrep.setPatternSyntax( QRegExp::Wildcard );
+    int pindex = rawdata->indexOf( qrep );
+
+    QString pstring = rawdata->at( pindex );//fill the distance velocity doubles
+    QString etypestring( "SIMPLE");
+    numstart = pstring.indexOf( p );
+    rightsize = pstring.size() - numstart - p.size();
+    QString pvalstring = pstring.right( rightsize );
+    for(int i = 0; i < pvalstring.size() ; ++i ){
+        if( pvalstring.at(i).isLetter() == true ){
+            pstring = pvalstring.left( i );
+            etypestring = pvalstring.right(pvalstring.size() - i );
+            break;
+        }
+    }
+    ok = false;
+    rawproperties->PropMu = pstring.toDouble( &ok );
+
+    rawproperties->PropEMethod = InstData::SimpleE;
+    if( etypestring == "ARBITRARY" )
+        rawproperties->PropEMethod = InstData::ArbMu;
+    if( etypestring == "DERIVED" )
+        rawproperties->PropEMethod = InstData::DerivedMu;
+
+    return( *rawproperties );
 }
 
 /******************************************************************************
@@ -336,16 +428,16 @@ InstData::Properties InstData::CreateProperties( QStringList rawproperties )
     return_property.PropAmpGain = CreateAmpGain( rawproperties );
 
 //Determine Density
+    return_property.PropDensity = CreateDensity( rawproperties );
 
 //Wave Type
     QRegExp wavetype("*P-*");
     wavetype.setPatternSyntax( QRegExp::Wildcard);
     index = rawproperties.indexOf(wavetype);
     return_property.PropWave = index == -1? Wave::SWave : Wave::PWave;
-//EMethod
 
-//Mu?
-
+//EMethod & Mu
+    return_property = CreateE( &rawproperties, &return_property );
 
     return( return_property );
 }
@@ -365,26 +457,33 @@ InstData::Test InstData::CreateTest(QStringList rawtest)
     QStringList::const_iterator rawtestiterator;
     QString workingstring;
     int index = -1;
+
     QRegExp test("*Test:*");
     test.setPatternSyntax( QRegExp::Wildcard);
+    index = rawtest.indexOf(test);
+    workingstring = rawtest.at( index );
+    return_test.TestNumber = CreateTestNumber( workingstring );//test Number
+
     QRegExp testdatetime("*Test Date/Time:*");
     testdatetime.setPatternSyntax( QRegExp::Wildcard);
-    QRegExp transittime("*Transit Time:*");
-    transittime.setPatternSyntax( QRegExp::Wildcard);
-
-    index = rawtest.indexOf(test);  //regular expression
-    workingstring = rawtest.at( index );
-    return_test.TestNumber = CreateTestNumber( workingstring );
-
     index = rawtest.indexOf(testdatetime);  //regular expression
     workingstring = rawtest.at( index );
-    return_test.TestTime = CreateDateTime( workingstring ); //working 8/20/18
+    return_test.TestTime = CreateDateTime( workingstring ); //date and time
 
-    return_test.TestProp = CreateProperties( rawtest );
+    return_test.TestProp = CreateProperties( rawtest ); //returns properties in struct
 
-    return_test.TransitTime = CreateTransitTime( rawtest );
+    QRegExp transittime("*Transit Time:*");
+    transittime.setPatternSyntax( QRegExp::Wildcard);
+    return_test.TransitTime = CreateTransitTime( rawtest );// returns transit time
 
-    return_test.TestProp = CreateCalc( rawtest, return_test.TestProp );
+    return_test.TestProp = CreateCalc( rawtest, return_test.TestProp ); //returns values for velocity and distance
+
+    bool numtest = false;
+    long addbufffer = 0;
+    for( rawtestiterator = rawtest.begin(); rawtestiterator != rawtest.end(); ++rawtestiterator ){
+        addbufffer = (*rawtestiterator).toInt(&numtest);
+        if( numtest == true ) {return_test.ADC.append(addbufffer);}
+    }
 
     return( return_test );
 }
