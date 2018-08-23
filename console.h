@@ -56,6 +56,7 @@ public:
     explicit Console(QWidget *parent = 0);
 
     void putData(const QByteArray &data);
+    void putData(const QStringList &data);
 
     void setLocalEchoEnabled(bool set);
 
