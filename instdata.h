@@ -94,6 +94,7 @@ private:
     Test CreateTest( QStringList rawtest);
     unsigned CreateTestNumber( QString rawtest );
     double CreateTransitTime( QStringList rawtest );
+    Wave CreateWaveType( QStringList rawproperties );
 
     QStringList GetADC( Test* workingtest );
     QString GetAmpGain( Test* workingtest );
@@ -102,8 +103,10 @@ private:
     QString GetDateTime( Test* workingtest );
     QString GetDensity( Test* workingtest );
     QString GetE( Test* workingTest );
+    QString GetMu( Test* workingtest );
     QString GetTestNumber( Test* workingtest );
     QString GetTransitTime( Test* workingtest );
+    QString GetWaveType( Test* workingtest );
 };
 
 #endif // INST_DATA_H

@@ -1,10 +1,13 @@
 Todo list
 
 splash screen dialog - done
-Open comport after splash screen
+Open comport after splash screen - done
 define dialog - used Menu
-send data out serial port
+send data out serial port - done
+
 integrate data class
+ - format output data
+ - get list test number?
 
 1. The program itself loaded on my PC (Windows 7 Pro), but the user needs to close the program immediately, and restart it using the desktop icon. Otherwise the program will not work and the following message is displayed... (see p14 below)
 

@@ -346,39 +346,39 @@ void MainWindow::CreateActions()
 void MainWindow::CreateMenus()
 {
     FileMenu = menuBar()->addMenu(tr("&File"));
-    FileMenu->addAction(newAct);
-    FileMenu->addAction(openAct);
-    FileMenu->addAction(saveAct);
+    FileMenu->addAction( newAct );
+    FileMenu->addAction( openAct );
+    FileMenu->addAction( saveAct );
     FileMenu->addSeparator();
-    FileMenu->addAction(exitAct);
+    FileMenu->addAction( exitAct );
 
-    EditMenu = menuBar()->addMenu(tr("&Edit"));
-    EditMenu->addAction(copyAct);
+    EditMenu = menuBar()->addMenu( tr( "&Edit" ));
+    EditMenu->addAction( copyAct );
 
-    ToolMenu = menuBar()->addMenu(tr("&Tool"));
-    ToolMenu->addAction(PlotAct);
+    ToolMenu = menuBar()->addMenu( tr( "&Tool" ));
+    ToolMenu->addAction( PlotAct );
 
     ToolMenu->addSeparator();
-    RunMenu = ToolMenu->addMenu(tr("&Run"));
-    RunMenu->addAction(RunYesAct);
-    RunMenu->addAction(RunNoAct);
-    SaveDataMenu = ToolMenu->addMenu(tr("Sa&ve Data"));
-    SaveDataMenu->addAction(SaveDataYesAct);
-    SaveDataMenu->addAction(SaveDataNoAct);
+    RunMenu = ToolMenu->addMenu( tr( "&Run" ));
+    RunMenu->addAction( RunYesAct );
+    RunMenu->addAction( RunNoAct );
+    SaveDataMenu = ToolMenu->addMenu( tr( "Sa&ve Data" ));
+    SaveDataMenu->addAction( SaveDataYesAct );
+    SaveDataMenu->addAction( SaveDataNoAct );
     SavePicMenu = ToolMenu->addMenu(tr("Save &Pic"));
-    SavePicMenu->addAction(SavePicYesAct);
-    SavePicMenu->addAction(SavePicNoAct);
+    SavePicMenu->addAction( SavePicYesAct );
+    SavePicMenu->addAction( SavePicNoAct );
 
     ToolMenu->addSeparator();
     AmpGainMenu = ToolMenu->addMenu(tr("&Amplifier Gain"));
-    AmpGainMenu->addAction(AmpGain1Act);
-    AmpGainMenu->addAction(AmpGain5Act);
-    AmpGainMenu->addAction(AmpGain10Act);
-    AmpGainMenu->addAction(AmpGain25Act);
-    AmpGainMenu->addAction(AmpGain50Act);
-    AmpGainMenu->addAction(AmpGain100Act);
-    AmpGainMenu->addAction(AmpGain250Act);
-    AmpGainMenu->addAction(AmpGain500Act);
+    AmpGainMenu->addAction( AmpGain1Act );
+    AmpGainMenu->addAction( AmpGain5Act );
+    AmpGainMenu->addAction( AmpGain10Act );
+    AmpGainMenu->addAction( AmpGain25Act );
+    AmpGainMenu->addAction( AmpGain50Act );
+    AmpGainMenu->addAction( AmpGain100Act );
+    AmpGainMenu->addAction( AmpGain250Act );
+    AmpGainMenu->addAction( AmpGain500Act );
 
     CaptureRateMenu = ToolMenu->addMenu(tr("&Capture Rate"));
     CaptureRateMenu->addAction( CaptureRate250Act );
@@ -395,17 +395,17 @@ void MainWindow::CreateMenus()
     VoltMenu->addAction( LoVoltAct );
 
     ToolMenu->addSeparator();
-    ToolMenu->addAction(DistanceAct);
-    ToolMenu->addAction(VelocityAct);
+    ToolMenu->addAction( DistanceAct );
+    ToolMenu->addAction( VelocityAct );
 
     ToolMenu->addSeparator();
     UnitsMenu = ToolMenu->addMenu( tr( "&Units" ));
     UnitsMenu->addAction( USCAct );
     UnitsMenu->addAction( MetricAct );
 
-    helpMenu = menuBar()->addMenu(tr("&Help"));
-    helpMenu->addAction(aboutAct);
-    helpMenu->addAction(aboutQtAct);
+    helpMenu = menuBar()->addMenu( tr( "&Help" ));
+    helpMenu->addAction( aboutAct );
+    helpMenu->addAction( aboutQtAct );
 }
 
 /******************************************************************************
@@ -988,6 +988,12 @@ void MainWindow::SerialDataRecieved()
     QMessageBox::information(this, tr("Serial Port"), tr("End of Upload"));
     SerialTimeOut->stop();
     CurrentData->AddTest( uploadeddata );
+
+    bool ok = false;
+    SerialConsole->clear();
+    SerialConsole->putData( CurrentData->GetTest( 4, &ok));//get current test number?
+    SerialConsole->setFocus();
+    SerialConsole->moveCursor( QTextCursor::Start );
 }
 
 /******************************************************************************

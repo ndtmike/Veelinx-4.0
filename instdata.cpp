@@ -430,6 +430,9 @@ InstData::Properties InstData::CreateProperties( QStringList rawproperties )
 //Determine Density
     return_property.PropDensity = CreateDensity( rawproperties );
 
+//Determine Wave Type
+    return_property.PropWave = CreateWaveType( rawproperties );
+
 //Wave Type
     QRegExp wavetype("*P-*");
     wavetype.setPatternSyntax( QRegExp::Wildcard);
@@ -539,6 +542,37 @@ double InstData::CreateTransitTime( QStringList rawtest )
 
 /******************************************************************************
 
+  Function: CreateWaveType
+
+  Description:
+  ============
+
+******************************************************************************/
+InstData::Wave InstData::CreateWaveType( QStringList rawproperties )
+{
+    const QString pwave = "WAVE TYPE: 'P'";
+    const QString swave = "WAVE TYPE: 'S'";
+
+    InstData::Wave return_property = PWave;
+
+    QRegExp regexp( pwave );
+    regexp.setPatternSyntax( QRegExp::Wildcard);
+    int index = rawproperties.indexOf( regexp );
+    if( index != -1 ){ //determine the rate
+        return_property = PWave;
+    }
+
+    regexp.setPattern( swave );
+    index = rawproperties.indexOf( regexp );
+    if( index != -1 ){
+            return_property = SWave;
+    }
+
+    return( return_property );
+}
+
+/******************************************************************************
+
   Function: GetADC
   Description:
   ============
@@ -567,10 +601,11 @@ QStringList InstData::GetADC( Test* workingtest )
 ******************************************************************************/
 QString InstData::GetAmpGain( Test* workingtest )
 {
-    QString returnvariable = "50";
-    AmpGain workingvariable = workingtest->TestProp.PropAmpGain;
+    const QString gain = "   Gain: ";
+    QString returnvariable = gain + "50";
 
-    /*TODO fill with if statements*/
+    returnvariable = gain
+            + QString::number( int( workingtest->TestProp.PropAmpGain ), 10);
 
     return( returnvariable );
 }
@@ -585,12 +620,43 @@ QString InstData::GetAmpGain( Test* workingtest )
 ******************************************************************************/
 QStringList InstData::GetCalc( Test* workingtest )
 {
+    const QString inches = " inches";
+    const QString feetpersec = " feet per second";
+    const QString mm = " mm";
+    const QString meterspersecond = " meters per second";
+
     QString measured = "Measured: ";
     QString set = "Set: ";
     QStringList returnvariable;
     Calc workingvariable = workingtest->TestProp.PropCalc;
+    const int precision = 4;
+    bool usc = workingtest->TestProp.PropUnits == USC ? true : false;
 
-    /*TODO fill with if statements*/
+    if( workingvariable == Velocity ){
+        measured.append( " Distance ");
+        measured.append( QString::number( workingtest->TestProp.PropDistance,'g', precision ));
+        set.append( " Velocity ");
+        set.append(QString::number( workingtest->TestProp.PropVelocity,'g', precision ));
+        if( usc == true){
+            measured.append( inches);
+            set.append( feetpersec );
+        }else{
+            measured.append( mm );
+            set.append( meterspersecond );
+        }
+    }else{
+        set.append( " Distance ");
+        set.append( QString::number( workingtest->TestProp.PropVelocity,'g', precision ));
+        measured.append( " Velocity " );
+        measured.append(QString::number( workingtest->TestProp.PropDistance,'g', precision ));
+        if( usc == true){
+            measured.append( feetpersec );
+            set.append( inches );
+        }else{
+            measured.append( meterspersecond );
+            set.append( mm );
+        }
+    }
 
     returnvariable.append( set );
     returnvariable.append( measured );
@@ -608,10 +674,28 @@ QStringList InstData::GetCalc( Test* workingtest )
 ******************************************************************************/
 QString InstData::GetCaptureRate( Test* workingtest )
 {
-    QString returnvariable = "Rate: 500 kHz";
-    CaptureRate workingvariable = workingtest->TestProp.PropCaptureRate;
+    const QString rate250 = " 250 kHz";
+    const QString rate500 = " 500 kHz";
+    const QString rate1000 = " 1 MHz";
+    const QString rate2000 = " 2 MHz";
+    const QString rate = " Rate: ";
 
-    /*TODO fill with if statements*/
+    QString returnvariable = rate + rate500;
+    CaptureRate workingvariable = workingtest->TestProp.PropCaptureRate;
+    switch ( workingvariable ) {
+    case RATE_250KHZ:
+        returnvariable = rate + rate250;
+        break;
+    case RATE_500KHZ:
+        returnvariable = rate + rate500;
+        break;
+    case RATE_1000KHZ:
+        returnvariable = rate + rate1000;
+        break;
+    case RATE_2000KHZ:
+        returnvariable = rate + rate2000;
+        break;
+    }
 
     return( returnvariable );
 }
@@ -628,8 +712,10 @@ QString InstData::GetDateTime( Test* workingtest )
 {
     QString returnvariable = "01/01/2001 00:00:01";
     QDateTime workingvariable = workingtest->TestTime;
+    QString dateformat = "MM/dd/yyy hh:mm:ss AP";
 
-    /*TODO fill with format statements*/
+    returnvariable = QString::QString( " Date and Time: " )
+            + workingvariable.toString( dateformat );
 
     return( returnvariable );
 }
@@ -644,10 +730,18 @@ QString InstData::GetDateTime( Test* workingtest )
 ******************************************************************************/
 QString InstData::GetDensity( Test* workingtest )
 {
-    QString returnvariable = "Density: 50";
+    QString returnvariable = "   Density: 100";
+    const int prec = 4;
     double workingvariable = workingtest->TestProp.PropDensity;
 
-    /*TODO fill with format statements*/
+    returnvariable = "   Density: "
+            + QString::number( workingvariable,'g', prec );
+
+    if( workingtest->TestProp.PropUnits == USC){
+        returnvariable.append( " pounds per cubic foot");
+    }else{
+        returnvariable.append( " Kg per cubic meter");
+    }
 
     return( returnvariable );
 }
@@ -662,10 +756,51 @@ QString InstData::GetDensity( Test* workingtest )
 ******************************************************************************/
 QString InstData::GetE( Test* workingtest )
 {
-    QString returnvariable = "Simple";
+    QString returnvariable = "Young's Modulus: ";
     double workingvariable = workingtest->TestProp.PropE;
+    const int pres = 4;
 
-    /*TODO fill with format statements*/
+    returnvariable.append( QString::number( workingvariable,'g', pres ));
+
+    if( workingtest->TestProp.PropUnits == USC){
+        returnvariable.append( " psi ");
+    }else{
+        returnvariable.append( " MPA ");
+    }
+
+    return( returnvariable );
+}
+
+/******************************************************************************
+
+  Function: GetMu
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QString InstData::GetMu( Test* workingtest )
+{
+    const QString pratio = "   Poisson's ratio: ";
+    QString returnvariable = "Simple";
+    double workingvariable = workingtest->TestProp.PropMu;
+    const int pres = 4;
+    EMethod emethod = workingtest->TestProp.PropEMethod;
+
+    returnvariable = pratio +
+            QString::number( workingvariable, 'g', pres );
+
+    switch( emethod ){
+    case ArbMu:
+        returnvariable.append(" Arbitrary Mu ");
+        break;
+    case DerivedMu:
+        returnvariable.append(" Derived Mu ");
+        break;
+    case SimpleE:
+        returnvariable.append(" Simple ");
+        break;
+    }
 
     return( returnvariable );
 }
@@ -683,7 +818,8 @@ QString InstData::GetTestNumber( Test* workingtest )
     QString returnvariable = "Test Number: ";
     unsigned workingvariable = workingtest->TestNumber;
 
-    returnvariable = returnvariable + QString::number( workingvariable, 10);
+    returnvariable = returnvariable + QString::number( workingvariable, 10 )
+                        + QString::QString(' ');
 
     return( returnvariable );
 }
@@ -765,6 +901,8 @@ QStringList InstData::GetTest( unsigned gettestnumber, bool* ok )
     QString header1 = "James Instruments V-METER MK IV Data";
     QString header2 = "Veelinx 4.0 copyright 2018";
     QString testnumdatetime;
+    QString rategaindensity;
+    QString emu;
 
     (*ok) = false;
     QVector<Test>::iterator i;
@@ -776,15 +914,36 @@ QStringList InstData::GetTest( unsigned gettestnumber, bool* ok )
     }
 
     testnumdatetime = GetTestNumber(i) + GetDateTime( i );
+    rategaindensity = GetCaptureRate( i ) + GetAmpGain( i ) + GetDensity( i );
+    emu = GetE( i ) + GetMu( i );
 
     returnlist.append( header1 );
     returnlist.append( header2 );
     returnlist.append( testnumdatetime );
     returnlist.append( GetTransitTime( i ));
     returnlist.append( GetCalc( i ));
-//    returnlist.append( );
+    returnlist.append( GetWaveType ( i ));
+    returnlist.append( rategaindensity );
+    returnlist.append( emu );
 
     returnlist.append( GetADC( i ));
 
     return( returnlist );
+}
+
+/******************************************************************************
+
+  Function: GetE
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+QString InstData::GetWaveType( Test* workingtest )
+{
+    const QString wavep = " Wave: 'P'";
+    const QString waves = " Wave: 'S'";
+    QString returnvariable = workingtest->TestProp.PropWave == PWave ?
+                wavep : waves;
+    return( returnvariable );
 }
