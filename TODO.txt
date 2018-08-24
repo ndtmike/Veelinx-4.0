@@ -6,8 +6,14 @@ define dialog - used Menu
 send data out serial port - done
 
 integrate data class
- - format output data
+ - format output data - done
  - get list test number?
+
+implement multiple test upload
+
+send commands to v-meter
+
+save and read to file
 
 1. The program itself loaded on my PC (Windows 7 Pro), but the user needs to close the program immediately, and restart it using the desktop icon. Otherwise the program will not work and the following message is displayed... (see p14 below)
 

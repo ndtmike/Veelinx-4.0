@@ -48,6 +48,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QLabel>
+#include <QtDebug>
 
 /******************************************************************************
 
@@ -77,6 +78,8 @@ MainWindow::MainWindow(QWidget *parent) :
     CreateMenus();
     CreateStatusBar();
     SerialCreateActions();
+
+    NewUpload = false;
 
 //single shot timer connects after everyting is loaded.
     QTimer* init_timer = new QTimer(this); //warning about being used?
@@ -741,7 +744,7 @@ void MainWindow::MenuActOpen()
 ******************************************************************************/
 void MainWindow::MenuActPlot()
 {
-    Plot->setTitle( "Plot Demo" );
+    Plot->setTitle( "V-Meter Data" );
     Plot->setCanvasBackground( Qt::white );
 
     Plot->insertLegend( new QwtLegend() );
@@ -759,9 +762,19 @@ void MainWindow::MenuActPlot()
     curve->setSymbol( symbol );
 
     QPolygonF points;
-    points << QPointF( 0.0, 4.4 ) << QPointF( 1.0, 3.3 )
-        << QPointF( 2.0, 4.5 ) << QPointF( 3.0, 6.8 )
-        << QPointF( 4.0, 7.9 ) << QPointF( 5.0, 7.1 );
+    QString rawdata = SerialConsole->toPlainText();
+    QStringList rawdatalist = rawdata.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+    bool numtest = false;
+    double addbufffer = 0;
+    double pointscount = 0.0;
+    foreach( const QString &str, rawdatalist ){
+        addbufffer = str.toDouble(&numtest);
+        if( numtest == true ) {
+            points << QPointF( pointscount, addbufffer);
+            pointscount += 1.0;
+        }
+    }
+
     curve->setSamples( points );
 
     curve->attach( Plot );
@@ -899,10 +912,13 @@ void MainWindow::MenuActVelocity()
 
     bool ok = false;
 
-    double distance = QInputDialog::getDouble( this, tr("Velocity"), tr("Requires a Value Between 100 and 40000 feet per second"), 3000 , 100, 40000, 0, &ok );
+    double distance = QInputDialog::getDouble( this, tr("Velocity"),
+                      tr("Requires a Value Between 100 and 40000 feet per second"),
+                      3000 , 100, 40000, 0, &ok );
 
     if(ok)
-        QMessageBox::information( this, tr("Distance"), ( QString("The Velocity is %1 feet").arg(distance)));
+        QMessageBox::information( this, tr("Distance"),
+                      ( QString("The Velocity is %1 feet").arg(distance)));
 
 }
 
@@ -991,9 +1007,19 @@ void MainWindow::SerialDataRecieved()
 
     bool ok = false;
     SerialConsole->clear();
-    SerialConsole->putData( CurrentData->GetTest( 4, &ok));//get current test number?
+    if( CurrentData->NumTests() < 2 ){
+        QVector< InstData::Test >::iterator begin = CurrentData->GetBeginItr();
+        unsigned displaytest = begin->TestNumber;
+        SerialConsole->putData( CurrentData->GetTest( displaytest, &ok));//get current test number?
+    }else{
+        QVector< InstData::Test >::iterator begin = ( CurrentData->GetEndItr()) - 1;
+        unsigned displaytest = begin->TestNumber;
+        SerialConsole->putData( CurrentData->GetTest( displaytest, &ok));
+    }
+    uploadeddata.clear();
     SerialConsole->setFocus();
     SerialConsole->moveCursor( QTextCursor::Start );
+    NewUpload = false;
 }
 
 /******************************************************************************
@@ -1053,10 +1079,14 @@ void MainWindow::SerialPortClose()
 ******************************************************************************/
 void MainWindow::SerialPortReadData()
 {
-    const int timeouttime = 200; //200 mSec after the last character it shoudl stop
+    if( NewUpload == false ){
+        SerialConsole->clear();
+    }
 
+    NewUpload = true;
+    const int timeouttime = 400; //200 mSec after the last character it should stop
     QByteArray data = Serial->readAll();
-    SerialConsole->putData(data);
+    SerialConsole->putData( data );
     SerialTimeOut->start( timeouttime );
 }
 

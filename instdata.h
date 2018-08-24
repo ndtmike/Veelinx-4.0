@@ -77,6 +77,7 @@ public:
     QStringList GetTest( unsigned gettestnumber, bool* ok );
     QVector<Test>::iterator GetBeginItr();
     QVector<Test>::iterator GetEndItr();
+    int NumTests( void );
 
 private:
 

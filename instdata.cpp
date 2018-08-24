@@ -12,6 +12,7 @@
 ** -------------------------------------------------------------------------*/
 
 #include "instdata.h"
+#include <QtDebug>
 
 /******************************************************************************
 
@@ -51,8 +52,8 @@ void InstData::AddTest(InstData::Test test)
   Add with QString
 
 ******************************************************************************/
-void InstData::AddTest(QString rawdata)
-{
+void InstData::AddTest( QString rawdata )
+{    
     QStringList rawdatalist = rawdata.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
     const QString const_james = "James Instruments V-METER MK IV";
     const QString const_end = "End";
@@ -71,6 +72,8 @@ void InstData::AddTest(QString rawdata)
         }
         working.clear();
     }
+    rawdata.clear();
+    rawdatalist.clear();
 }
 
 /******************************************************************************
@@ -946,4 +949,19 @@ QString InstData::GetWaveType( Test* workingtest )
     QString returnvariable = workingtest->TestProp.PropWave == PWave ?
                 wavep : waves;
     return( returnvariable );
+}
+
+/******************************************************************************
+
+  Function: NumTests
+  Description:
+  ============
+  Access Iterator
+
+******************************************************************************/
+int InstData::NumTests( void )
+{
+    int numtests = TestData.size();
+
+    return( numtests );
 }

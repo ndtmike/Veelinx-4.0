@@ -123,6 +123,7 @@ private slots:
 
 private:
     QByteArray Data;
+    bool NewUpload;
 
     struct SerialSettings {
         QString name;
