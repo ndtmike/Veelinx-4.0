@@ -101,11 +101,6 @@ MainWindow::~MainWindow()
 ******************************************************************************/
 void MainWindow::CreateActions()
 {
-    newAct = new QAction(tr("&New"), this);
-    newAct->setShortcuts(QKeySequence::New);
-    newAct->setStatusTip(tr("Create a new file"));
-    connect(newAct, &QAction::triggered, this, &MainWindow::MenuActNewFile);
-
     openAct = new QAction(tr("&Open..."), this);
     openAct->setShortcuts(QKeySequence::Open);
     openAct->setStatusTip(tr("Open an existing file"));
@@ -130,6 +125,10 @@ void MainWindow::CreateActions()
     PlotAct = new QAction(tr("&Plot"), this);
     PlotAct->setStatusTip(tr("Plots the Data Uploaded"));
     connect(PlotAct, &QAction::triggered, this, &MainWindow::MenuActPlot);
+
+    TestNumberAct = new QAction(tr("&Test Number"), this);
+    TestNumberAct->setStatusTip(tr("Select the Test Number to View"));
+    connect( TestNumberAct, &QAction::triggered, this, &MainWindow::MenuActTestNumber );
 
     RunNoAct = new QAction(tr("No"), this);
     RunNoAct->setStatusTip(tr("Stop V-Meter"));
@@ -349,7 +348,6 @@ void MainWindow::CreateActions()
 void MainWindow::CreateMenus()
 {
     FileMenu = menuBar()->addMenu(tr("&File"));
-    FileMenu->addAction( newAct );
     FileMenu->addAction( openAct );
     FileMenu->addAction( saveAct );
     FileMenu->addSeparator();
@@ -359,7 +357,6 @@ void MainWindow::CreateMenus()
     EditMenu->addAction( copyAct );
 
     ToolMenu = menuBar()->addMenu( tr( "&Tool" ));
-    ToolMenu->addAction( PlotAct );
 
     ToolMenu->addSeparator();
     RunMenu = ToolMenu->addMenu( tr( "&Run" ));
@@ -406,6 +403,10 @@ void MainWindow::CreateMenus()
     UnitsMenu->addAction( USCAct );
     UnitsMenu->addAction( MetricAct );
 
+    ViewMenu = menuBar()->addMenu( tr( "&View" ));
+    ViewMenu->addAction( PlotAct );
+    ViewMenu->addSeparator();
+
     helpMenu = menuBar()->addMenu( tr( "&Help" ));
     helpMenu->addAction( aboutAct );
     helpMenu->addAction( aboutQtAct );
@@ -427,6 +428,32 @@ void MainWindow::CreateStatusBar()
     Status->setMinimumSize(Status->sizeHint());
     statusBar()->addWidget(Status);
 }
+
+/******************************************************************************
+
+  Function: CreateTestmenu
+
+  Description:
+  ============
+  Dynamically Creates Menu Items for each test
+******************************************************************************/
+void MainWindow::CreateTestMenus()
+{
+    bool ok = false;
+    if( CurrentData->NumTests() < 2 ){
+        QVector< InstData::Test >::iterator begin = CurrentData->GetBeginItr();
+        unsigned displaytest = begin->TestNumber;
+        SerialConsole->putData( CurrentData->GetTest( displaytest, &ok));//get current test number?
+    }else{
+        QVector< InstData::Test >::iterator end = ( CurrentData->GetEndItr()) - 1;
+        unsigned displaytest = end->TestNumber;
+        SerialConsole->putData( CurrentData->GetTest( displaytest, &ok));
+
+        ViewMenu->addAction( TestNumberAct );
+    }
+
+}
+
 /******************************************************************************
 
   Function: MenuActAbout
@@ -618,6 +645,8 @@ void MainWindow::MenuCaptureRate2000()
 ******************************************************************************/
 void MainWindow::MenuActCopy()
 {
+    SerialConsole->selectAll();
+    SerialConsole->copy();
     ShowStatusMessage( "Copy Data" );
 }
 
@@ -707,20 +736,6 @@ void MainWindow::MenuActMetric()
 
 /******************************************************************************
 
-  Function: MenuActNewFile
-
-  Description:
-  ============
-  Executes the menu 'new file' actions
-
-******************************************************************************/
-void MainWindow::MenuActNewFile()
-{
-    ShowStatusMessage( "New File" );
-}
-
-/******************************************************************************
-
   Function: MenuActOpen
 
   Description:
@@ -731,6 +746,28 @@ void MainWindow::MenuActNewFile()
 void MainWindow::MenuActOpen()
 {
     ShowStatusMessage( "Open File" );
+    ShowStatusMessage( tr( "Save File" ));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("V-Meter Saved File"),
+                                QDir::homePath(), tr("All Files (*);;Text Files (*.txt)"));
+    QFile file( fileName );
+    if (!fileName.isEmpty()){
+        QTextStream out( &file );
+        if (!file.open(QFile::ReadOnly | QFile::Text)) {
+            QMessageBox::warning(this, "MainWindow",
+                                 tr("Cannot write file %1:\n%2.")
+                                 .arg(fileName)
+                                 .arg(file.errorString()));
+        }
+
+#ifndef QT_NO_CURSOR
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+#endif
+        SerialConsole->setPlainText( out.readAll());
+#ifndef QT_NO_CURSOR
+        QApplication::restoreOverrideCursor();
+#endif
+        ShowStatusMessage( fileName );
+     }
 }
 
 /******************************************************************************
@@ -744,7 +781,9 @@ void MainWindow::MenuActOpen()
 ******************************************************************************/
 void MainWindow::MenuActPlot()
 {
-    Plot->setTitle( "V-Meter Data" );
+    Plot->~QwtPlot();
+    Plot = new QwtPlot;
+    Plot->setTitle( "V-Meter Signal Plot" );
     Plot->setCanvasBackground( Qt::white );
 
     Plot->insertLegend( new QwtLegend() );
@@ -753,7 +792,7 @@ void MainWindow::MenuActPlot()
     grid->attach( Plot );
 
     QwtPlotCurve *curve = new QwtPlotCurve();
-    curve->setTitle( "Some Points" );
+    curve->setTitle( "V-Meter Raw Data" );
     curve->setPen( Qt::blue, 4 ),
     curve->setRenderHint( QwtPlotItem::RenderAntialiased, true );
 
@@ -776,7 +815,6 @@ void MainWindow::MenuActPlot()
     }
 
     curve->setSamples( points );
-
     curve->attach( Plot );
 
     Plot->replot();
@@ -870,6 +908,7 @@ void MainWindow::MenuActSaveDataYes()
 {
     ShowStatusMessage( tr( "Save Yes" ));
 }
+
 /******************************************************************************
 
   Function: MenuActSave
@@ -882,9 +921,65 @@ void MainWindow::MenuActSaveDataYes()
 void MainWindow::MenuActSave()
 {
     ShowStatusMessage( tr( "Save File" ));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("V-Meter Saved File"),
+                                QDir::homePath(), tr("All Files (*);;Text Files (*.txt)"));
+    QFile file( fileName );
+    if (!fileName.isEmpty()){
+        QTextStream out( &file );
+        if (!file.open(QFile::WriteOnly | QFile::Text)) {
+            QMessageBox::warning(this, "MainWindow",
+                                 tr("Cannot write file %1:\n%2.")
+                                 .arg(fileName)
+                                 .arg(file.errorString()));
+        }
+
+#ifndef QT_NO_CURSOR
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+#endif
+        out << SerialConsole->toPlainText();
+#ifndef QT_NO_CURSOR
+        QApplication::restoreOverrideCursor();
+#endif
+        ShowStatusMessage( fileName );
+     }
 }
 
+/******************************************************************************
 
+  Function: MenuActTestNumber
+
+  Description:
+  ============
+
+
+******************************************************************************/
+void MainWindow::MenuActTestNumber()
+{
+    QStringList items;
+
+    for( QVector< InstData::Test >::iterator itr = ( CurrentData->GetBeginItr());
+         itr != CurrentData->GetEndItr(); ++itr ){
+
+        items << QString::number( itr->TestNumber, 10 );
+    }
+
+    bool ok;
+    QString item = QInputDialog::getItem(this, tr("QInputDialog::getItem()"),
+                                               tr("Test Number"), items, 0, false, &ok);
+    unsigned displaytest;
+    if (ok && !item.isEmpty()){
+        for( QVector< InstData::Test >::iterator itr = ( CurrentData->GetBeginItr());
+            itr != CurrentData->GetEndItr(); ++itr ){
+                if( item == QString::number( itr->TestNumber ))
+                    displaytest = itr->TestNumber;
+            }
+    }
+    SerialConsole->clear();
+    SerialConsole->putData( CurrentData->GetTest( displaytest, &ok));
+    SerialConsole->setFocus();
+    SerialConsole->moveCursor( QTextCursor::Start );
+    ShowStatusMessage( tr( "Select Test Number" ));
+}
 /******************************************************************************
 
   Function: MenuActMetric
@@ -1004,18 +1099,10 @@ void MainWindow::SerialDataRecieved()
     QMessageBox::information(this, tr("Serial Port"), tr("End of Upload"));
     SerialTimeOut->stop();
     CurrentData->AddTest( uploadeddata );
-
-    bool ok = false;
     SerialConsole->clear();
-    if( CurrentData->NumTests() < 2 ){
-        QVector< InstData::Test >::iterator begin = CurrentData->GetBeginItr();
-        unsigned displaytest = begin->TestNumber;
-        SerialConsole->putData( CurrentData->GetTest( displaytest, &ok));//get current test number?
-    }else{
-        QVector< InstData::Test >::iterator begin = ( CurrentData->GetEndItr()) - 1;
-        unsigned displaytest = begin->TestNumber;
-        SerialConsole->putData( CurrentData->GetTest( displaytest, &ok));
-    }
+
+    CreateTestMenus();
+
     uploadeddata.clear();
     SerialConsole->setFocus();
     SerialConsole->moveCursor( QTextCursor::Start );

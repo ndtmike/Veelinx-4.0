@@ -99,7 +99,6 @@ private slots:
     void MenuActMeasureDistance();
     void MenuActMeasureVelocity();
     void MenuActMetric();
-    void MenuActNewFile();
     void MenuActOpen();
     void MenuActPlot();
     void MenuActPicNo();
@@ -109,7 +108,7 @@ private slots:
     void MenuActSaveDataNo();
     void MenuActSaveDataYes();
     void MenuActSave();
-//    void MenuActSettings();
+    void MenuActTestNumber();
     void MenuActUSC();
     void MenuActVelocity();
 
@@ -143,6 +142,7 @@ private:
     void CreateActions();
     void CreateMenus();
     void CreateStatusBar();
+    void CreateTestMenus();
     void SerialCreateActions();
 
     SerialSettings CurrentSerialSettings;
@@ -161,13 +161,13 @@ private:
     QMenu *SavePicMenu;
     QMenu *ToolMenu;
     QMenu *UnitsMenu;
+    QMenu *ViewMenu;
     QMenu *VoltMenu;
 
     QAction *aboutAct;
     QAction *aboutQtAct;
     QAction *copyAct;
     QAction *exitAct;
-    QAction *newAct;
     QAction *openAct;
     QAction *saveAct;
 
@@ -199,6 +199,7 @@ private:
     QAction *SavePicNoAct;
     QAction *SavePicYesAct;
     QAction *SettingsAct;
+    QAction *TestNumberAct;
     QAction *LoVoltAct;
     QAction *USCAct;
     QAction *VelocityAct;

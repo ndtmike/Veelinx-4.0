@@ -9,11 +9,11 @@ integrate data class
  - format output data - done
  - get list test number?
 
-implement multiple test upload
+implement multiple test upload - done
 
 send commands to v-meter
 
-save and read to file
+save and read to file - done
 
 1. The program itself loaded on my PC (Windows 7 Pro), but the user needs to close the program immediately, and restart it using the desktop icon. Otherwise the program will not work and the following message is displayed... (see p14 below)
 
