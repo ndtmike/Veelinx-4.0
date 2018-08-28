@@ -21,7 +21,8 @@ SOURCES += \
 HEADERS += \
     mainwindow.h \
     console.h \
-    instdata.h
+    instdata.h \
+    comm_def.h
 
 CONFIG += \
     C++11 \

@@ -122,7 +122,9 @@ private slots:
 
 private:
     QByteArray Data;
-    bool NewUpload;
+    bool NewUpload;  //for multiple test uploads
+    bool Metric; //check if in metric mode
+    bool MessageReply; //check test data or message reply
 
     struct SerialSettings {
         QString name;

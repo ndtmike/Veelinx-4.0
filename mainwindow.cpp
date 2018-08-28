@@ -40,10 +40,11 @@
 **
 ****************************************************************************/
 
-#include "mainwindow.h"
+#include "comm_def.h"
 #include "console.h"
-#include "setting_dialog.h"
 #include "instdata.h"
+#include "mainwindow.h"
+#include "setting_dialog.h"
 
 #include <QInputDialog>
 #include <QMessageBox>
@@ -80,6 +81,8 @@ MainWindow::MainWindow(QWidget *parent) :
     SerialCreateActions();
 
     NewUpload = false;
+    Metric =  false;
+    MessageReply = false;
 
 //single shot timer connects after everyting is loaded.
     QTimer* init_timer = new QTimer(this); //warning about being used?
@@ -269,7 +272,7 @@ void MainWindow::CreateActions()
     HiVoltAct = new QAction(tr( "Hi Voltage Pulse" ), this);
     HiVoltAct->setStatusTip(tr( "Change to Hi Voltage Pulse" ));
     HiVoltAct->setCheckable ( true );
-    HiVoltAct->setChecked( true );
+    HiVoltAct->setChecked( false );
     connect( HiVoltAct, &QAction::triggered, this, &MainWindow::MenuActHiVolt );
 
     LoVoltAct = new QAction(tr("Low Voltage Pulse"), this);
@@ -488,6 +491,16 @@ void MainWindow::MenuActAbout()
 ******************************************************************************/
 void MainWindow::MenuActAmpGain1()
 {
+    QByteArray ba1;
+
+    ba1.resize( REMOTE_CTRL_MSG_SIZE );
+    ba1[0] = REMOTE_CTRL_HEADER; ba1[1] =  MSG_CODE_AMP_GAIN;
+    ba1[2] = AMPLIFIER_GAIN_1_SETTING;
+    ba1[3] = MSG_CODE_FILL;
+    ba1[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( ba1 );
+
     ShowStatusMessage( "Change to Amplifier Gain 1" );
 }
 
@@ -501,6 +514,15 @@ void MainWindow::MenuActAmpGain1()
 ******************************************************************************/
 void MainWindow::MenuActAmpGain5()
 {
+    QByteArray ba5;
+
+    ba5.resize( REMOTE_CTRL_MSG_SIZE );
+    ba5[0] = REMOTE_CTRL_HEADER; ba5[1] =  MSG_CODE_AMP_GAIN;
+    ba5[2] = AMPLIFIER_GAIN_5_SETTING;
+    ba5[3] = MSG_CODE_FILL; ba5[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( ba5 );
+
     ShowStatusMessage( "Change to Amplifier Gain 5" );
 }
 
@@ -514,6 +536,15 @@ void MainWindow::MenuActAmpGain5()
 ******************************************************************************/
 void MainWindow::MenuActAmpGain10()
 {
+    QByteArray ba10;
+
+    ba10.resize( REMOTE_CTRL_MSG_SIZE );
+    ba10[0] = REMOTE_CTRL_HEADER; ba10[1] =  MSG_CODE_AMP_GAIN;
+    ba10[2] = AMPLIFIER_GAIN_10_SETTING;
+    ba10[3] = MSG_CODE_FILL; ba10[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( ba10 );
+
     ShowStatusMessage( "Change to Amplifier Gain 10" );
 }
 
@@ -528,6 +559,16 @@ void MainWindow::MenuActAmpGain10()
 ******************************************************************************/
 void MainWindow::MenuActAmpGain25()
 {
+    QByteArray ba25;
+
+    ba25.resize( REMOTE_CTRL_MSG_SIZE );
+    ba25[0] = REMOTE_CTRL_HEADER; ba25[1] =  MSG_CODE_AMP_GAIN;
+    ba25[2] = AMPLIFIER_GAIN_25_SETTING;
+    ba25[3] = MSG_CODE_FILL;
+    ba25[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( ba25 );
+
     ShowStatusMessage( "Change to Amplifier Gain 25" );
 }
 
@@ -541,6 +582,15 @@ void MainWindow::MenuActAmpGain25()
 ******************************************************************************/
 void MainWindow::MenuActAmpGain50()
 {
+    QByteArray ba50;
+
+    ba50.resize( REMOTE_CTRL_MSG_SIZE );
+    ba50[0] = REMOTE_CTRL_HEADER; ba50[1] =  MSG_CODE_AMP_GAIN;
+    ba50[2] = AMPLIFIER_GAIN_50_SETTING;
+    ba50[3] = MSG_CODE_FILL; ba50[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( ba50 );
+
     ShowStatusMessage( "Change to Amplifier Gain 50" );
 }
 
@@ -554,6 +604,15 @@ void MainWindow::MenuActAmpGain50()
 ******************************************************************************/
 void MainWindow::MenuActAmpGain100()
 {
+    QByteArray ba100;
+
+    ba100.resize( REMOTE_CTRL_MSG_SIZE );
+    ba100[0] = REMOTE_CTRL_HEADER; ba100[1] =  MSG_CODE_AMP_GAIN;
+    ba100[2] = AMPLIFIER_GAIN_100_SETTING;
+    ba100[3] = MSG_CODE_FILL; ba100[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( ba100 );
+
     ShowStatusMessage( "Change to Amplifier Gain 100" );
 }
 
@@ -567,6 +626,15 @@ void MainWindow::MenuActAmpGain100()
 ******************************************************************************/
 void MainWindow::MenuActAmpGain250()
 {
+    QByteArray ba250;
+
+    ba250.resize( REMOTE_CTRL_MSG_SIZE );
+    ba250[0] = REMOTE_CTRL_HEADER; ba250[1] =  MSG_CODE_AMP_GAIN;
+    ba250[2] = AMPLIFIER_GAIN_250_SETTING;
+    ba250[3] = MSG_CODE_FILL; ba250[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( ba250 );
+
     ShowStatusMessage( "Change to Amplifier Gain 250" );
 }
 
@@ -580,6 +648,15 @@ void MainWindow::MenuActAmpGain250()
 ******************************************************************************/
 void MainWindow::MenuActAmpGain500()
 {
+    QByteArray ba500;
+
+    ba500.resize( REMOTE_CTRL_MSG_SIZE );
+    ba500[0] = REMOTE_CTRL_HEADER; ba500[1] =  MSG_CODE_AMP_GAIN;
+    ba500[2] = AMPLIFIER_GAIN_500_SETTING;
+    ba500[3] = MSG_CODE_FILL; ba500[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( ba500 );
+
     ShowStatusMessage( "Change to Amplifier Gain 500" );
 }
 
@@ -593,6 +670,13 @@ void MainWindow::MenuActAmpGain500()
 ******************************************************************************/
 void MainWindow::MenuCaptureRate250()
 {
+    QByteArray bpr250;
+    bpr250.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr250[0] = REMOTE_CTRL_HEADER; bpr250[1] =  MSG_CODE_PICTURE_RATE;
+    bpr250[2] = PICTURE_RATE_250MHZ;
+    bpr250[3] = MSG_CODE_FILL; bpr250[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpr250 );
     ShowStatusMessage( "Change to Capture Rate 250" );
 }
 
@@ -606,6 +690,13 @@ void MainWindow::MenuCaptureRate250()
 ******************************************************************************/
 void MainWindow::MenuCaptureRate500()
 {
+    QByteArray bpr500;
+    bpr500.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr500[0] = REMOTE_CTRL_HEADER; bpr500[1] =  MSG_CODE_PICTURE_RATE;
+    bpr500[2] = PICTURE_RATE_500MHZ;
+    bpr500[3] = MSG_CODE_FILL; bpr500[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpr500 );
     ShowStatusMessage( "Change to Capture Rate 500" );
 }
 
@@ -619,6 +710,13 @@ void MainWindow::MenuCaptureRate500()
 ******************************************************************************/
 void MainWindow::MenuCaptureRate1000()
 {
+    QByteArray bpr1000;
+    bpr1000.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr1000[0] = REMOTE_CTRL_HEADER; bpr1000[1] =  MSG_CODE_PICTURE_RATE;
+    bpr1000[2] = PICTURE_RATE_1000MHZ;
+    bpr1000[3] = MSG_CODE_FILL; bpr1000[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpr1000 );
     ShowStatusMessage( "Change to Capture Rate 1000" );
 }
 
@@ -632,6 +730,13 @@ void MainWindow::MenuCaptureRate1000()
 ******************************************************************************/
 void MainWindow::MenuCaptureRate2000()
 {
+    QByteArray bpr2000;
+    bpr2000.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr2000[0] = REMOTE_CTRL_HEADER; bpr2000[1] =  MSG_CODE_PICTURE_RATE;
+    bpr2000[2] = PICTURE_RATE_2000MHZ;
+    bpr2000[3] = MSG_CODE_FILL; bpr2000[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpr2000 );
     ShowStatusMessage( "Change to Capture Rate 2000" );
 }
 
@@ -661,12 +766,25 @@ void MainWindow::MenuActCopy()
 void MainWindow::MenuActDistance()
 {
     bool ok = false;
+    const double dvalue = 1.0;
+    const double dvaluemetric = 0.3;
+    const int decimals = 1;
+    const int metricdecimals = 3;
+    double distance = 0.0;
 
     ShowStatusMessage( "Transducer Distance Changed" );
 
-    double distance = QInputDialog::getDouble( this, tr("Distance"), tr("Requires a value between 0.1 and 600 feet "), 1 , 0.1, 600, 1, &ok );
-
-    if(ok) QMessageBox::information( this, tr("Distance"), ( QString("The Distance is %1 feet").arg(distance)));
+    if( Metric == false ){
+        distance = QInputDialog::getDouble( this, tr("Distance"), tr("Requires a value between 0.1 and 600 feet "),
+                                               dvalue , MAT_TRAVEL_DIST_MIN
+                                               , MAT_TRAVEL_DIST_MAX, decimals, &ok );
+        if(ok) QMessageBox::information( this, tr("Distance"), ( QString("The Distance is %1 feet").arg(distance)));
+    }else{
+        distance = QInputDialog::getDouble( this, tr("Distance"), tr("Requires a value between 0.00254 and 15.25 meters "),
+                                               dvaluemetric , MAT_TRAVEL_DIST_MIN_MET,
+                                               MAT_TRAVEL_DIST_MAX_MET, metricdecimals, &ok );
+            if(ok) QMessageBox::information( this, tr("Distance"), ( QString("The Distance is %1 meters").arg(distance)));
+    }
 
 }
 /******************************************************************************
@@ -679,6 +797,14 @@ void MainWindow::MenuActDistance()
 ******************************************************************************/
 void MainWindow::MenuActHiVolt()
 {
+    QByteArray bvolthi;
+    bvolthi.resize( REMOTE_CTRL_MSG_SIZE );
+    bvolthi[0] = REMOTE_CTRL_HEADER; bvolthi[1] =  MSG_CODE_PULSER_VOLTAGE;//??
+    bvolthi[2] = MSG_CODE_HIVOLT ;
+    bvolthi[3] = MSG_CODE_FILL; bvolthi[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bvolthi );
+
     ShowStatusMessage( "Change to Hi Voltage" );
 }
 
@@ -692,6 +818,14 @@ void MainWindow::MenuActHiVolt()
 ******************************************************************************/
 void MainWindow::MenuActLoVolt()
 {
+    QByteArray bvoltlo;
+    bvoltlo.resize( REMOTE_CTRL_MSG_SIZE );
+    bvoltlo[0] = REMOTE_CTRL_HEADER; bvoltlo[1] =  MSG_CODE_PULSER_VOLTAGE;//??
+    bvoltlo[2] = MSG_CODE_LOVOLT;
+    bvoltlo[3] = MSG_CODE_FILL; bvoltlo[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bvoltlo );
+
     ShowStatusMessage( "Change to Lo Voltage" );
 }
 
@@ -710,7 +844,7 @@ void MainWindow::MenuActMeasureDistance()
 
 /******************************************************************************
 
-  Function: MenuActMeasureDistance
+  Function: MenuActMeasureVelocity
 
   Description:
   ============
@@ -731,6 +865,7 @@ void MainWindow::MenuActMeasureVelocity()
 ******************************************************************************/
 void MainWindow::MenuActMetric()
 {
+    Metric = false;
     ShowStatusMessage( "Change to Metric Units" );
 }
 
@@ -836,6 +971,14 @@ void MainWindow::MenuActPlot()
 ******************************************************************************/
 void MainWindow::MenuActPicNo()
 {
+    QByteArray bpsf;
+    bpsf.resize( REMOTE_CTRL_MSG_SIZE );
+    bpsf[0] = REMOTE_CTRL_HEADER; bpsf[1] =  MSG_CODE_DISPLAY_SIG;//??
+    bpsf[2] = MSG_CODE_OFF;
+    bpsf[3] = MSG_CODE_FILL; bpsf[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpsf );
+
     ShowStatusMessage( tr("Save Picture No" ));
 }
 
@@ -850,6 +993,14 @@ void MainWindow::MenuActPicNo()
 ******************************************************************************/
 void MainWindow::MenuActPicYes()
 {
+    QByteArray bpst;
+    bpst.resize( REMOTE_CTRL_MSG_SIZE );
+    bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_DISPLAY_SIG;//??
+    bpst[2] = MSG_CODE_ON;
+    bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpst );
+
     ShowStatusMessage( tr("Save Picture Yes" ));
 }
 
@@ -864,6 +1015,13 @@ void MainWindow::MenuActPicYes()
 ******************************************************************************/
 void MainWindow::MenuActRunNo()
 {
+    QByteArray bpst;
+    bpst.resize( REMOTE_CTRL_MSG_SIZE );
+    bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_RUN_A_TEST;//??
+    bpst[2] = MSG_CODE_OFF;
+    bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpst );
     ShowStatusMessage( tr( "Run No" ));
 }
 
@@ -878,12 +1036,19 @@ void MainWindow::MenuActRunNo()
 ******************************************************************************/
 void MainWindow::MenuActRunYes()
 {
+    QByteArray bpst;
+    bpst.resize( REMOTE_CTRL_MSG_SIZE );
+    bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_RUN_A_TEST;//??
+    bpst[2] = MSG_CODE_ON;
+    bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpst );
     ShowStatusMessage( tr("Run Yes" ));
 }
 
 /******************************************************************************
 
-  Function: MenuActSaveNo
+  Function: MenuActSaveDataNo
 
   Description:
   ============
@@ -892,12 +1057,20 @@ void MainWindow::MenuActRunYes()
 ******************************************************************************/
 void MainWindow::MenuActSaveDataNo()
 {
+    QByteArray bdsf;
+    bdsf.resize( REMOTE_CTRL_MSG_SIZE );
+    bdsf[0] = REMOTE_CTRL_HEADER; bdsf[1] =  MSG_CODE_SAVE_TEST;
+    bdsf[2] = MSG_CODE_OFF;
+    bdsf[3] = MSG_CODE_FILL; bdsf[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bdsf );
+
     ShowStatusMessage( tr( "Save No" ));
 }
 
 /******************************************************************************
 
-  Function: MenuActSaveYes
+  Function: MenuActSaveDataYes
 
   Description:
   ============
@@ -906,6 +1079,14 @@ void MainWindow::MenuActSaveDataNo()
 ******************************************************************************/
 void MainWindow::MenuActSaveDataYes()
 {
+    QByteArray bdst;
+    bdst.resize( REMOTE_CTRL_MSG_SIZE );
+    bdst[0] = REMOTE_CTRL_HEADER; bdst[1] =  MSG_CODE_SAVE_TEST;
+    bdst[2] = MSG_CODE_ON;
+    bdst[3] = MSG_CODE_FILL; bdst[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bdst );
+
     ShowStatusMessage( tr( "Save Yes" ));
 }
 
@@ -982,7 +1163,7 @@ void MainWindow::MenuActTestNumber()
 }
 /******************************************************************************
 
-  Function: MenuActMetric
+  Function: MenuActUSC
 
   Description:
   ============
@@ -990,6 +1171,7 @@ void MainWindow::MenuActTestNumber()
 ******************************************************************************/
 void MainWindow::MenuActUSC()
 {
+    Metric = false;
     ShowStatusMessage( "Change to US Customary Units" );
 }
 
@@ -1006,14 +1188,31 @@ void MainWindow::MenuActVelocity()
     ShowStatusMessage( "Transducer Velocity Changed" );
 
     bool ok = false;
+    double velocity = 0.0;
+    double scaler = 10.0; //some kind of scale constant
+    const double dvalue = 3000;
+    const double dvaluemetric = 1000;
 
-    double distance = QInputDialog::getDouble( this, tr("Velocity"),
+    if(Metric == false){
+        velocity = QInputDialog::getDouble( this, tr("Velocity"),
                       tr("Requires a Value Between 100 and 40000 feet per second"),
-                      3000 , 100, 40000, 0, &ok );
-
-    if(ok)
-        QMessageBox::information( this, tr("Distance"),
-                      ( QString("The Velocity is %1 feet").arg(distance)));
+                      dvalue ,
+                      MAT_TRAVEL_VEL_MIN,
+                      MAT_TRAVEL_VEL_MAX,
+                      0, &ok );
+        if(ok) QMessageBox::information( this, tr( "Velocity" ),
+               ( QString("The Velocity is %1 feet/sec").arg( velocity )));
+    }else{
+        velocity = QInputDialog::getDouble( this, tr("Velocity"),
+                      tr("Requires a Value Between 100 and 40000 feet per second"),
+                      dvaluemetric ,
+                      MAT_TRAVEL_VEL_MIN_MET / scaler,
+                      MAT_TRAVEL_VEL_MAX / scaler,
+                      0, &ok );
+        if(ok) QMessageBox::information( this, tr("Velocity"),
+               ( QString("The Velocity is %1 meters/second").arg( velocity )));
+               velocity *= 10.0;
+    }
 
 }
 
@@ -1079,13 +1278,13 @@ void MainWindow::SerialCreateActions()
     connect(Serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
             SLOT(SerialPortHandleError(QSerialPort::SerialPortError)));
     connect(Serial, SIGNAL(readyRead()), this, SLOT(SerialPortReadData()));
-    connect(SerialTimeOut,SIGNAL(timeout()), this,SLOT(SerialDataRecieved()));
+    connect(SerialTimeOut,SIGNAL(timeout()), this, SLOT( SerialDataRecieved() ));
 
 }
 
 /******************************************************************************
 
-  Function: SerialCreateActions
+  Function: SerialDataRecieved
 
   Description:
   ============
@@ -1096,14 +1295,16 @@ void MainWindow::SerialDataRecieved()
 {
     QString uploadeddata = SerialConsole->toPlainText();
 
-    QMessageBox::information(this, tr("Serial Port"), tr("End of Upload"));
     SerialTimeOut->stop();
-    CurrentData->AddTest( uploadeddata );
-    SerialConsole->clear();
+    if( MessageReply == false ){
+        QMessageBox::information(this, tr("Serial Port"), tr("End of Upload"));
+        CurrentData->AddTest( uploadeddata );
+        SerialConsole->clear();
+        CreateTestMenus();
+    }else{
+        QMessageBox::information(this, tr("Serial Port"), tr("Value Changed"));
+    }
 
-    CreateTestMenus();
-
-    uploadeddata.clear();
     SerialConsole->setFocus();
     SerialConsole->moveCursor( QTextCursor::Start );
     NewUpload = false;
@@ -1171,7 +1372,7 @@ void MainWindow::SerialPortReadData()
     }
 
     NewUpload = true;
-    const int timeouttime = 400; //200 mSec after the last character it should stop
+    const int timeouttime = 200; //200 mSec after the last character it should stop
     QByteArray data = Serial->readAll();
     SerialConsole->putData( data );
     SerialTimeOut->start( timeouttime );
@@ -1188,12 +1389,32 @@ void MainWindow::SerialPortReadData()
 ******************************************************************************/
 void MainWindow::SerialPortWriteData(const QByteArray &data)
 {
-    Serial->write(data);
+//    bool return_result = false;
+    MessageReply = true;
+    NewUpload = false;
+
+//    Data = "";
+    if( Serial->clear()){
+         Serial->write(data);
+    }
+    QTime dieTime;
+    if( data[1] ==  MSG_CODE_REVIEW_TEST_NUM ){
+        dieTime = QTime::currentTime().addSecs(5); // wait five second
+    }else{
+        dieTime = QTime::currentTime().addSecs(2); // wait two second
+    }
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
+//    QByteArray confirm_msg = Data;
+
+//    if( confirm_msg[0] == 'Z' || confirm_msg[0] == '\r'  ) return_result = true;
+
 }
 
 /******************************************************************************
 
-  Function: handleError
+  Function: SerialPortHandleError
 
   Description:
   ============
