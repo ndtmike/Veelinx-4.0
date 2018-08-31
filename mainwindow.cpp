@@ -269,6 +269,29 @@ void MainWindow::CreateActions()
     CaptureRateActGrp->addAction( CaptureRate1000Act );
     CaptureRateActGrp->addAction( CaptureRate2000Act );
 
+    PulseRate1Act = new QAction(tr("Pulse Rate 1"), this);
+    PulseRate1Act->setStatusTip(tr("Set Pulse Rate to 1"));
+    PulseRate1Act->setCheckable ( true );
+    PulseRate1Act->setChecked( false );
+    connect( PulseRate1Act, &QAction::triggered, this, &MainWindow::MenuActPulse1 );
+
+    PulseRate3Act = new QAction(tr("Pulse Rate 3"), this);
+    PulseRate3Act->setStatusTip(tr("Set Pulse Rate to 3"));
+    PulseRate3Act->setCheckable ( true );
+    PulseRate3Act->setChecked( true );
+    connect( PulseRate3Act, &QAction::triggered, this, &MainWindow::MenuActPulse3 );
+
+    PulseRate10Act = new QAction(tr("Pulse Rate 10"), this);
+    PulseRate10Act->setStatusTip(tr("Set Pulse Rate to 10"));
+    PulseRate10Act->setCheckable ( true );
+    PulseRate10Act->setChecked( false );
+    connect( PulseRate10Act, &QAction::triggered, this, &MainWindow::MenuActPulse10 );
+
+    PulseRateActGrp = new QActionGroup( this );
+    PulseRateActGrp->addAction( PulseRate1Act );
+    PulseRateActGrp->addAction( PulseRate3Act );
+    PulseRateActGrp->addAction( PulseRate10Act );
+
     HiVoltAct = new QAction(tr( "Hi Voltage Pulse" ), this);
     HiVoltAct->setStatusTip(tr( "Change to Hi Voltage Pulse" ));
     HiVoltAct->setCheckable ( true );
@@ -289,18 +312,27 @@ void MainWindow::CreateActions()
     MeasureDistAct->setStatusTip(tr( "Change to Measure Distance Between Transducers" ));
     MeasureDistAct->setCheckable ( true );
     MeasureDistAct->setChecked( true );
-    connect( MeasureDistAct, &QAction::triggered, this, &MainWindow::MenuActMeasureDistance );
+    connect( MeasureDistAct, &QAction::triggered, this, &MainWindow::MenuActDistance );
 
     MeasureVelAct = new QAction(tr( "Velocity" ), this);
     MeasureVelAct->setStatusTip(tr( "Change to Measure Velocity Between Transducers" ));
     MeasureVelAct->setCheckable ( true );
     MeasureVelAct->setChecked( false );
-    connect( MeasureVelAct, &QAction::triggered, this, &MainWindow::MenuActMeasureVelocity );
+    connect( MeasureVelAct, &QAction::triggered, this, &MainWindow::MenuActVelocity );
 
     MeasureActGrp = new QActionGroup( this );
-    VoltageActGrp->addAction( MeasureDistAct );
-    VoltageActGrp->addAction( MeasureVelAct );
+    MeasureActGrp->addAction( MeasureDistAct );
+    MeasureActGrp->addAction( MeasureVelAct );
 
+    CycleTimeAct = new QAction(tr( "Cycle Time" ), this);
+    MeasureVelAct->setStatusTip(tr( "Change to Cycle Time Between Tests" ));
+    connect( CycleTimeAct, &QAction::triggered, this, &MainWindow::MenuActCycleTime );
+
+    DensityAct = new QAction(tr( "Density" ), this);
+    MeasureVelAct->setStatusTip(tr( "Change Material Density" ));
+    connect( DensityAct, &QAction::triggered, this, &MainWindow::MenuActDensity );
+
+/*
     USCAct = new QAction(tr( "US Customary" ), this);
     USCAct->setStatusTip(tr( "Change to US Customary Units" ));
     USCAct->setCheckable ( true );
@@ -312,19 +344,13 @@ void MainWindow::CreateActions()
     MetricAct->setCheckable ( true );
     MetricAct->setChecked( false );
     connect( MetricAct, &QAction::triggered, this, &MainWindow::MenuActMetric);
+*/
 
-    DistanceAct = new QAction(tr("&Distance"), this);
-    saveAct->setStatusTip(tr("Set the Distance Between Transducers"));
-    connect(DistanceAct, &QAction::triggered, this, &MainWindow::MenuActDistance);
-
-    VelocityAct = new QAction(tr("&Velocity"), this);
-    saveAct->setStatusTip(tr("Set the Velocity Between Transducers"));
-    connect(VelocityAct, &QAction::triggered, this, &MainWindow::MenuActVelocity);
-
+/*
     UnitsActGrp = new QActionGroup( this );
     UnitsActGrp->addAction( USCAct );
     UnitsActGrp->addAction( MetricAct );
-
+*/
     aboutAct = new QAction( tr("&About"), this);
     aboutAct->setStatusTip( tr("Show the application's About box") );
     connect( aboutAct, &QAction::triggered, this, &MainWindow:: MenuActAbout );
@@ -362,17 +388,6 @@ void MainWindow::CreateMenus()
     ToolMenu = menuBar()->addMenu( tr( "&Tool" ));
 
     ToolMenu->addSeparator();
-    RunMenu = ToolMenu->addMenu( tr( "&Run" ));
-    RunMenu->addAction( RunYesAct );
-    RunMenu->addAction( RunNoAct );
-    SaveDataMenu = ToolMenu->addMenu( tr( "Sa&ve Data" ));
-    SaveDataMenu->addAction( SaveDataYesAct );
-    SaveDataMenu->addAction( SaveDataNoAct );
-    SavePicMenu = ToolMenu->addMenu(tr("Save &Pic"));
-    SavePicMenu->addAction( SavePicYesAct );
-    SavePicMenu->addAction( SavePicNoAct );
-
-    ToolMenu->addSeparator();
     AmpGainMenu = ToolMenu->addMenu(tr("&Amplifier Gain"));
     AmpGainMenu->addAction( AmpGain1Act );
     AmpGainMenu->addAction( AmpGain5Act );
@@ -389,22 +404,36 @@ void MainWindow::CreateMenus()
     CaptureRateMenu->addAction( CaptureRate1000Act );
     CaptureRateMenu->addAction( CaptureRate2000Act );
 
-    MeasureMenu = ToolMenu->addMenu( tr("&Measure"));
-    MeasureMenu->addAction( MeasureDistAct );
-    MeasureMenu->addAction( MeasureVelAct );
-
     VoltMenu = ToolMenu->addMenu( tr( "&Voltage" ));
     VoltMenu->addAction( HiVoltAct );
     VoltMenu->addAction( LoVoltAct );
 
-    ToolMenu->addSeparator();
-    ToolMenu->addAction( DistanceAct );
-    ToolMenu->addAction( VelocityAct );
+    ToolMenu->addAction( DensityAct );
 
     ToolMenu->addSeparator();
-    UnitsMenu = ToolMenu->addMenu( tr( "&Units" ));
-    UnitsMenu->addAction( USCAct );
-    UnitsMenu->addAction( MetricAct );
+
+    PulseMenu = ToolMenu->addMenu((tr("&Pulse Rate")));
+    PulseMenu->addAction( PulseRate1Act );
+    PulseMenu->addAction( PulseRate3Act );
+    PulseMenu->addAction( PulseRate10Act );
+
+    ToolMenu->addAction( CycleTimeAct );
+
+    RunMenu = ToolMenu->addMenu( tr( "&Run" ));
+    RunMenu->addAction( RunYesAct );
+    RunMenu->addAction( RunNoAct );
+
+    SaveDataMenu = ToolMenu->addMenu( tr( "Sa&ve Data" ));
+    SaveDataMenu->addAction( SaveDataYesAct );
+    SaveDataMenu->addAction( SaveDataNoAct );
+
+    SavePicMenu = ToolMenu->addMenu(tr("Save &Pic"));
+    SavePicMenu->addAction( SavePicYesAct );
+    SavePicMenu->addAction( SavePicNoAct );
+
+    MeasureMenu = ToolMenu->addMenu( tr("&Measure"));
+    MeasureMenu->addAction( MeasureDistAct );
+    MeasureMenu->addAction( MeasureVelAct );
 
     ViewMenu = menuBar()->addMenu( tr( "&View" ));
     ViewMenu->addAction( PlotAct );
@@ -468,9 +497,9 @@ void MainWindow::CreateTestMenus()
 ******************************************************************************/
 void MainWindow::MenuActAbout()
 {
-    const QString about_rebarlinx = tr("The <b>Rebarlinx Sofware</b> is for use with <br>"
+    const QString about_rebarlinx = tr("The <b>Veelinx Sofware</b> is for use with <br>"
                                        "the James Instruments Inc.<br>"
-                                       "<a href=\"https://www.ndtjames.com/Rebarscope-Complete-System-p/r-c-4.htm\">Rebarscope</a><br>"
+                                       "<a href=\"https://www.ndtjames.com/V-Meter-MK-IV-p/v-c-4.htm\">V-Meter</a><br>"
                                        "USA: +1773.4636565<br>"
                                        "Europe: +31.548.659032<br>"
                                        "Email: <a href=\"mailto:info@ndtjames.com?Subject=Rebarlinx\" target=\"_top\">info@ndtjames.com</a><br>"
@@ -757,36 +786,85 @@ void MainWindow::MenuActCopy()
 
 /******************************************************************************
 
-  Function: MenuActDistance
+  Function: MenuActCycleTime
 
   Description:
   ============
 
 ******************************************************************************/
-void MainWindow::MenuActDistance()
+void MainWindow::MenuActCycleTime()
 {
+    QByteArray b;
     bool ok = false;
-    const double dvalue = 1.0;
-    const double dvaluemetric = 0.3;
-    const int decimals = 1;
-    const int metricdecimals = 3;
-    double distance = 0.0;
+    const int value = 3;
+    int returnui = value;
 
-    ShowStatusMessage( "Transducer Distance Changed" );
+    returnui = QInputDialog::getInt( this, tr("Cycle Time"),
+                      tr("Requires a Value Between 2 and 10 second"),
+                      value ,
+                      CYCLE_TIME_MIN,
+                      CYCLE_TIME_MAX,
+                      0, &ok );
+        if(ok) QMessageBox::information( this, tr( "Cycle Time" ),
+               ( QString("The Cycle Time is %1 sec").arg( returnui )));
 
-    if( Metric == false ){
-        distance = QInputDialog::getDouble( this, tr("Distance"), tr("Requires a value between 0.1 and 600 feet "),
-                                               dvalue , MAT_TRAVEL_DIST_MIN
-                                               , MAT_TRAVEL_DIST_MAX, decimals, &ok );
-        if(ok) QMessageBox::information( this, tr("Distance"), ( QString("The Distance is %1 feet").arg(distance)));
-    }else{
-        distance = QInputDialog::getDouble( this, tr("Distance"), tr("Requires a value between 0.00254 and 15.25 meters "),
-                                               dvaluemetric , MAT_TRAVEL_DIST_MIN_MET,
-                                               MAT_TRAVEL_DIST_MAX_MET, metricdecimals, &ok );
-            if(ok) QMessageBox::information( this, tr("Distance"), ( QString("The Distance is %1 meters").arg(distance)));
-    }
+    b.resize( REMOTE_CTRL_MSG_SIZE );
+    b[0] = REMOTE_CTRL_HEADER;
+    b[1] =  MSG_CODE_PULSE_CYCLE_TIME;
+    b[2] = (char) returnui;
+    b[3] = MSG_CODE_FILL;
+    b[4] = REMOTE_CTRL_FOOTER;
+    SerialPortWriteData( b );
 
+    ShowStatusMessage( "Change to Measure Distance" );
 }
+
+/******************************************************************************
+
+  Function: MenuActDensity
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::MenuActDensity()
+{
+    QByteArray b;
+    bool ok = false;
+    const int value = 3;
+    const unsigned top_byte_divisor = 0x100; //divide by this to get the top byte
+    int returnui = value;
+
+    if( Metric == false){
+        returnui = QInputDialog::getInt( this, tr("Cycle Time"),
+                      tr("Requires a Value Between 50 and 500 pounds per cubic foot"),
+                      value ,
+                      MAT_DENSITY_MIN,
+                      MAT_DENSITY_MAX,
+                      0, &ok );
+        if(ok) QMessageBox::information( this, tr( "Cycle Time" ),
+               ( QString("The Density is %1 ").arg( returnui )));
+    }else{
+        returnui = QInputDialog::getInt( this, tr("Cycle Time"),
+                      tr("Requires a Value Between 80 and 800 kg per cubic meter"),
+                      value ,
+                      MAT_DENSITY_MIN_MET,
+                      MAT_DENSITY_MAX_MET,
+                      0, &ok );
+        if(ok) QMessageBox::information( this, tr( "Cycle Time" ),
+               ( QString("The Density is %1 ").arg( returnui )));
+    }
+    b.resize( REMOTE_CTRL_MSG_SIZE );
+    b[0] = REMOTE_CTRL_HEADER;
+    b[1] =  MSG_CODE_DENSITY;
+    b[2] = (char) ( returnui / top_byte_divisor );
+    b[3] = (char) ( returnui % top_byte_divisor );
+    b[4] = REMOTE_CTRL_FOOTER;
+    SerialPortWriteData( b );
+
+    ShowStatusMessage( "Change to Measure Distance" );
+}
+
 /******************************************************************************
 
   Function: MenuActHiVolt
@@ -837,22 +915,58 @@ void MainWindow::MenuActLoVolt()
   ============
 
 ******************************************************************************/
-void MainWindow::MenuActMeasureDistance()
+void MainWindow::MenuActDistance()
 {
+    QByteArray bdistance;
+    bool ok = false;
+    double velocity = 0.0;
+    double scaler = 10.0; //some kind of scale constant
+    const unsigned top_byte_divisor = 0x100; //divide by this to get the top byte
+    const double dvalue = 3000;
+    const double dvaluemetric = 1000;
+    int returnui;
+
+    if(Metric == false){
+        velocity = QInputDialog::getDouble( this, tr("Velocity"),
+                      tr("Requires a Value Between 100 and 40000 feet per second"),
+                      dvalue ,
+                      MAT_TRAVEL_VEL_MIN,
+                      MAT_TRAVEL_VEL_MAX,
+                      0, &ok );
+        if(ok) QMessageBox::information( this, tr( "Velocity" ),
+               ( QString("The Velocity is %1 feet/sec").arg( velocity )));
+    }else{
+        velocity = QInputDialog::getDouble( this, tr("Velocity"),
+                      tr("Requires a Value Between 100 and 40000 feet per second"),
+                      dvaluemetric ,
+                      MAT_TRAVEL_VEL_MIN_MET / scaler,
+                      MAT_TRAVEL_VEL_MAX_MET / scaler,
+                      0, &ok );
+        if(ok) QMessageBox::information( this, tr("Velocity"),
+               ( QString("The Velocity is %1 meters/second").arg( velocity )));
+        velocity *= 10.0;
+    }
+
+
+    returnui = (int) velocity;
+
+    bdistance.resize( REMOTE_CTRL_MSG_SIZE );
+    bdistance[0] = REMOTE_CTRL_HEADER;
+    bdistance[1] =  MSG_CODE_MSMT_MODE;
+    bdistance[2] = MSG_CODE_VELOCITY;
+    bdistance[3] = MSG_CODE_FILL;
+    bdistance[4] = REMOTE_CTRL_FOOTER;
+    SerialPortWriteData( bdistance );
+
+    bdistance.resize( REMOTE_CTRL_MSG_SIZE ); //this not working?
+    bdistance[0] = REMOTE_CTRL_HEADER;
+    bdistance[1] = MSG_CODE_CH_VELOCITY;
+    bdistance[2] = (char) ( returnui / top_byte_divisor );
+    bdistance[3] = (char) ( returnui % top_byte_divisor );
+    bdistance[4] = REMOTE_CTRL_FOOTER;
+    SerialPortWriteData( bdistance );
+
     ShowStatusMessage( "Change to Measure Distance" );
-}
-
-/******************************************************************************
-
-  Function: MenuActMeasureVelocity
-
-  Description:
-  ============
-
-******************************************************************************/
-void MainWindow::MenuActMeasureVelocity()
-{
-    ShowStatusMessage( "Change to Measure Velocity" );
 }
 
 /******************************************************************************
@@ -1002,6 +1116,69 @@ void MainWindow::MenuActPicYes()
     SerialPortWriteData( bpst );
 
     ShowStatusMessage( tr("Save Picture Yes" ));
+}
+
+/******************************************************************************
+
+  Function: MenuActPulse1
+
+  Description:
+  ============
+
+
+******************************************************************************/
+void MainWindow::MenuActPulse1()
+{
+    QByteArray bpst;
+    bpst.resize( REMOTE_CTRL_MSG_SIZE );
+    bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_PULSE_FREQ;
+    bpst[2] = PULSES_PER_SEQ_1;
+    bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpst );
+    ShowStatusMessage( tr( "Change Pulse to 1" ));
+}
+
+/******************************************************************************
+
+  Function: MenuActPulse3
+
+  Description:
+  ============
+
+
+******************************************************************************/
+void MainWindow::MenuActPulse3()
+{
+    QByteArray bpst;
+    bpst.resize( REMOTE_CTRL_MSG_SIZE );
+    bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_PULSE_FREQ;
+    bpst[2] = PULSES_PER_SEQ_3;
+    bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpst );
+    ShowStatusMessage( tr( "Change Pulse to 3" ));
+}
+
+/******************************************************************************
+
+  Function: MenuActPulse10
+
+  Description:
+  ============
+
+
+******************************************************************************/
+void MainWindow::MenuActPulse10()
+{
+    QByteArray bpst;
+    bpst.resize( REMOTE_CTRL_MSG_SIZE );
+    bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_PULSE_FREQ;
+    bpst[2] = PULSES_PER_SEQ_10;
+    bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
+
+    SerialPortWriteData( bpst );
+    ShowStatusMessage( tr( "Change Pulse to 10" ));
 }
 
 /******************************************************************************
@@ -1188,32 +1365,54 @@ void MainWindow::MenuActVelocity()
     ShowStatusMessage( "Transducer Velocity Changed" );
 
     bool ok = false;
-    double velocity = 0.0;
-    double scaler = 10.0; //some kind of scale constant
+    double distance = 0.0;
+    QByteArray bdistance;
+    const unsigned top_byte_divisor = 0x100; //divide by this to get the top byte
+    const double scaler = 10.0; //some kind of scale constant
     const double dvalue = 3000;
     const double dvaluemetric = 1000;
+    unsigned returnui;
 
     if(Metric == false){
-        velocity = QInputDialog::getDouble( this, tr("Velocity"),
-                      tr("Requires a Value Between 100 and 40000 feet per second"),
+        distance = QInputDialog::getDouble( this, tr("Distance"),
+                      tr("Requires a Value Between 0.1 and 600 feet"),
                       dvalue ,
-                      MAT_TRAVEL_VEL_MIN,
-                      MAT_TRAVEL_VEL_MAX,
+                      MAT_TRAVEL_DIST_MIN,
+                      MAT_TRAVEL_DIST_MAX ,
                       0, &ok );
-        if(ok) QMessageBox::information( this, tr( "Velocity" ),
-               ( QString("The Velocity is %1 feet/sec").arg( velocity )));
+        if(ok) QMessageBox::information( this, tr( "Distance" ),
+               ( QString("The Distance is %1 feet").arg( distance )));
     }else{
-        velocity = QInputDialog::getDouble( this, tr("Velocity"),
-                      tr("Requires a Value Between 100 and 40000 feet per second"),
+        distance = QInputDialog::getDouble( this, tr("Distance"),
+                      tr("Requires a Value Between 0.003 and 15 meters per second"),
                       dvaluemetric ,
-                      MAT_TRAVEL_VEL_MIN_MET / scaler,
-                      MAT_TRAVEL_VEL_MAX / scaler,
+                      MAT_TRAVEL_DIST_MIN_MET * scaler,
+                      MAT_TRAVEL_DIST_MAX_MET * scaler,
                       0, &ok );
-        if(ok) QMessageBox::information( this, tr("Velocity"),
-               ( QString("The Velocity is %1 meters/second").arg( velocity )));
-               velocity *= 10.0;
+        if(ok) QMessageBox::information( this, tr("Distance"),
+               ( QString("The Distance is %1 meters/second").arg( distance )));
     }
 
+    distance *= 10.0;
+
+    returnui = ( int ) distance;
+    bdistance.resize( REMOTE_CTRL_MSG_SIZE );
+    bdistance[0] = REMOTE_CTRL_HEADER;
+    bdistance[1] =  MSG_CODE_MSMT_MODE;
+    bdistance[2] = MSG_CODE_DISTANCE; // codes a reversed?
+    bdistance[3] = MSG_CODE_FILL;
+    bdistance[4] = REMOTE_CTRL_FOOTER;
+    SerialPortWriteData( bdistance );
+
+    bdistance.resize( REMOTE_CTRL_MSG_SIZE ); // this section not working
+    bdistance[0] = REMOTE_CTRL_HEADER;
+    bdistance[1] = MSG_CODE_CH_DISTANCE;
+    bdistance[2] = (char) ( returnui / top_byte_divisor );
+    bdistance[3] = (char) ( returnui % top_byte_divisor );
+    bdistance[4] = REMOTE_CTRL_FOOTER;
+    SerialPortWriteData( bdistance );
+
+    ShowStatusMessage( "Change to Measure Velocity" );
 }
 
 /******************************************************************************
@@ -1288,7 +1487,7 @@ void MainWindow::SerialCreateActions()
 
   Description:
   ============
-
+ - removed confirmation messagebox
 
 ******************************************************************************/
 void MainWindow::SerialDataRecieved()
@@ -1297,14 +1496,12 @@ void MainWindow::SerialDataRecieved()
 
     SerialTimeOut->stop();
     if( MessageReply == false ){
-        QMessageBox::information(this, tr("Serial Port"), tr("End of Upload"));
         CurrentData->AddTest( uploadeddata );
-        SerialConsole->clear();
         CreateTestMenus();
-    }else{
-        QMessageBox::information(this, tr("Serial Port"), tr("Value Changed"));
     }
-
+#ifndef R_DEBUG
+    SerialConsole->clear();
+#endif
     SerialConsole->setFocus();
     SerialConsole->moveCursor( QTextCursor::Start );
     NewUpload = false;
@@ -1389,27 +1586,22 @@ void MainWindow::SerialPortReadData()
 ******************************************************************************/
 void MainWindow::SerialPortWriteData(const QByteArray &data)
 {
-//    bool return_result = false;
     MessageReply = true;
     NewUpload = false;
+    const int reviewtestnumsec = 5;
+    const int sec = 2;
 
-//    Data = "";
     if( Serial->clear()){
          Serial->write(data);
     }
     QTime dieTime;
     if( data[1] ==  MSG_CODE_REVIEW_TEST_NUM ){
-        dieTime = QTime::currentTime().addSecs(5); // wait five second
+        dieTime = QTime::currentTime().addSecs( reviewtestnumsec ); // wait five second
     }else{
-        dieTime = QTime::currentTime().addSecs(2); // wait two second
+        dieTime = QTime::currentTime().addSecs( sec ); // wait two second
     }
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-
-//    QByteArray confirm_msg = Data;
-
-//    if( confirm_msg[0] == 'Z' || confirm_msg[0] == '\r'  ) return_result = true;
-
 }
 
 /******************************************************************************

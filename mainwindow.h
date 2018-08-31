@@ -92,17 +92,20 @@ private slots:
     void MenuCaptureRate500();
     void MenuCaptureRate1000();
     void MenuCaptureRate2000();
+    void MenuActCycleTime();
+    void MenuActDensity();
     void MenuActDistance();
     void MenuActCopy();
     void MenuActHiVolt();
     void MenuActLoVolt();
-    void MenuActMeasureDistance();
-    void MenuActMeasureVelocity();
     void MenuActMetric();
     void MenuActOpen();
     void MenuActPlot();
     void MenuActPicNo();
     void MenuActPicYes();
+    void MenuActPulse1();
+    void MenuActPulse3();
+    void MenuActPulse10();
     void MenuActRunNo();
     void MenuActRunYes();
     void MenuActSaveDataNo();
@@ -153,11 +156,13 @@ private:
 
     QMenu *AmpGainMenu;
     QMenu *CaptureRateMenu;
+//    QMenu *CycleRateMenu;
+//    QMenu *DensityMenu;
     QMenu *MeasureMenu;
-    QMenu *PulseRateMenu;
     QMenu *FileMenu;
     QMenu *EditMenu;
     QMenu *helpMenu;
+    QMenu *PulseMenu;
     QMenu *RunMenu;
     QMenu *SaveDataMenu;
     QMenu *SavePicMenu;
@@ -185,6 +190,8 @@ private:
     QAction *CaptureRate500Act;
     QAction *CaptureRate1000Act;
     QAction *CaptureRate2000Act;
+    QAction *CycleTimeAct;
+    QAction *DensityAct;
     QAction *DistanceAct;
     QAction *HiVoltAct;
     QAction *MeasureDistAct;
@@ -208,7 +215,7 @@ private:
 
     QActionGroup *AmpGainActGrp;
     QActionGroup *CaptureRateActGrp;
-    QActionGroup *DensityGrp;
+//    QActionGroup *DensityGrp;
     QActionGroup *MeasureActGrp;
     QActionGroup *PulseRateActGrp;
     QActionGroup *RunGrp;
