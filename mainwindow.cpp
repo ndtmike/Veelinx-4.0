@@ -577,7 +577,6 @@ void MainWindow::MenuActAmpGain10()
     ShowStatusMessage( "Change to Amplifier Gain 10" );
 }
 
-
 /******************************************************************************
 
   Function: MenuActAmpGain25
@@ -928,7 +927,7 @@ void MainWindow::MenuActDistance()
 
     if(Metric == false){
         velocity = QInputDialog::getDouble( this, tr("Velocity"),
-                      tr("Requires a Value Between 100 and 40000 feet per second"),
+                      tr("Requires a Value Between 1000 and 40000 feet per second"),
                       dvalue ,
                       MAT_TRAVEL_VEL_MIN,
                       MAT_TRAVEL_VEL_MAX,
@@ -1322,7 +1321,7 @@ void MainWindow::MenuActTestNumber()
     }
 
     bool ok;
-    QString item = QInputDialog::getItem(this, tr("QInputDialog::getItem()"),
+    QString item = QInputDialog::getItem(this, tr("Test Number?"),
                                                tr("Test Number"), items, 0, false, &ok);
     unsigned displaytest;
     if (ok && !item.isEmpty()){
@@ -1375,7 +1374,7 @@ void MainWindow::MenuActVelocity()
 
     if(Metric == false){
         distance = QInputDialog::getDouble( this, tr("Distance"),
-                      tr("Requires a Value Between 0.1 and 600 feet"),
+                      tr("Requires a Value Between 0.1 and 600 Inches"),
                       dvalue ,
                       MAT_TRAVEL_DIST_MIN,
                       MAT_TRAVEL_DIST_MAX ,

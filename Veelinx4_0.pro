@@ -35,7 +35,7 @@ win32{
     VERSION = $$(VEE_VERSION)
     QMAKE_TARGET_COMPANY = "James Instruments Inc."
     QMAKE_TARGET_PRODUCT = "Veelinx"
-    QMAKE_TARGET_DESCRIPTION = "Upload Software for James Instruments Rebarscope"
+    QMAKE_TARGET_DESCRIPTION = "Upload Software for James Instruments Veelinx"
     QMAKE_TARGET_COPYRIGHT = "@2018 James Instruments Inc."
 
 #test for what compiler is to link proper libraries

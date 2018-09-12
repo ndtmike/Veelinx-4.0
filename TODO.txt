@@ -32,3 +32,34 @@ save and read to file - done
 5. After Uploading a file, the "endUpload" / Upload Complete message is displayed on the screen with a rolling ball icon (or wait/working indicator). This rolling ball does not go away even after several minutes... after the data is uploaded to the PC. This ball stays on the screen until the user moves it to the OK button and right clicks over it. (Note: The upload itself appears to take only a few seconds (5-10). So I'm not sure why this does not change to an arrow image once the upload is complete???)
 
 
+1. The Veelinx adjustable Velocity range should be: 1000 ft/s - 40,000 ft/s; as seen within the unit's software. Presently Veelinx allows the user to see a range of 100 ft/s to 40,000 ft/s. Somehow a zero was dropped from the 100 setting. (see Veelinx screenshot_p9)
+
+ - DONE
+
+2. The adjustable Distance range should be 0.1" (inches) - 600.0" (inches). The Veelinx software shows 0.1 - 600 feet. (see _p8 & Distance screen pics)
+
+ - DONE
+
+3. After uploading a series of tests from the unit, the user has the option to view the individual tests... or so it appears. Unfortunately, they can only set the Veelinx software to either Test Number "2" or "3"... nothing else appears in the drop down box, even when there are 5 tests. (see Veelinx screenshot_p11)
+
+ - Works OK Installation package Issue?  Problem with Dialog Title - Fixed
+
+4. When retrieving (or Opening) a saved file. The program defaults to the user's C Drive. Which is OK for 1-2 files, but gets old when working with multiple files. The default setting needs to be adjusted to return (or use) the last folder opened. This would save time and headaches for our customers. (Veelinx screenshot_p0)
+
+ - Windows Default
+
+5. The plotted data graphs do not show units on either the X or Y axis. Presently the Y axis is -40,000 to 40,000; while the X axis shows 0 to 600. Should these have something like ft/s & inches? Or is it just common knowledge??? (See Veelinx screenshot_p5) Also, if that is the case, why does the unit's display show different axis numbers??? (See Display screen_p1)
+
+ - No Units on this on all software
+
+6. One of the install screens show a "Microsoft Visual C++ 2015...". Should this be visible to customers? (Veelinx_p7)
+
+ - This is more common than you realize
+
+7. This is a strange one... I tried repeating it, but couldn't. Nor did I recall how I found it in the first place. The Veelinx software showed 2 Rebarscope screens??? (See Veelinx screenshot_p02)
+
+ - DONE
+
+8. As we discussed before you left, there is NO upload data option in the Tools drop down list. The unit does upload data manually one at a time &/or everything at once. I didn't try saving this data stream... and how it gets saved. Is it in individual files, or just one really large file??? Maybe that's the next thing to try.
+
+ - I can't find the ability to do this in the code that we have on the server...the command to do this is missing.

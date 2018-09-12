@@ -29,11 +29,11 @@
 #define MAT_TRAVEL_DIST_IMP_TO_MET      254 / 10000
 #define MAT_TRAVEL_DIST_MIN             0.1
 #define MAT_TRAVEL_DIST_MIN_MET         0.002540
-#define MAT_TRAVEL_VEL_MAX              4000
+#define MAT_TRAVEL_VEL_MAX              40000
 #define MAT_TRAVEL_VEL_MAX_MET          12191
 #define MAT_TRAVEL_VEL_MET_TO_IMP       3.280851
 #define MAT_TRAVEL_VEL_IMP_TO_MET       3047 / 10000
-#define MAT_TRAVEL_VEL_MIN              100
+#define MAT_TRAVEL_VEL_MIN              1000
 #define MAT_TRAVEL_VEL_MIN_MET          304
 #define PICTURE_RATE_250MHZ             0
 #define PICTURE_RATE_500MHZ             1
