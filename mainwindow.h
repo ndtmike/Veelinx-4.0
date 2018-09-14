@@ -128,6 +128,7 @@ private:
     bool NewUpload;  //for multiple test uploads
     bool Metric; //check if in metric mode
     bool MessageReply; //check test data or message reply
+    bool IsInitialSettings; //used to check if upload is initial settings
 
     struct SerialSettings {
         QString name;
@@ -149,6 +150,8 @@ private:
     void CreateStatusBar();
     void CreateTestMenus();
     void SerialCreateActions();
+    void SerialGetInititialSettings();
+    void SerialParseInitialSettings();
 
     SerialSettings CurrentSerialSettings;
 
@@ -156,8 +159,6 @@ private:
 
     QMenu *AmpGainMenu;
     QMenu *CaptureRateMenu;
-//    QMenu *CycleRateMenu;
-//    QMenu *DensityMenu;
     QMenu *MeasureMenu;
     QMenu *FileMenu;
     QMenu *EditMenu;
@@ -215,7 +216,6 @@ private:
 
     QActionGroup *AmpGainActGrp;
     QActionGroup *CaptureRateActGrp;
-//    QActionGroup *DensityGrp;
     QActionGroup *MeasureActGrp;
     QActionGroup *PulseRateActGrp;
     QActionGroup *RunGrp;

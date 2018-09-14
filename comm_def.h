@@ -62,23 +62,28 @@
 #define MSG_CODE_MSMT_MODE              0x04
 #define MSG_CODE_CH_DISTANCE            0x05
 #define MSG_CODE_CH_VELOCITY            0x06
-#define MSG_CODE_DISTANCE               0x00
-#define MSG_CODE_VELOCITY               0x01
 #define MSG_CODE_RUN_A_TEST             0x07
 #define MSG_CODE_AMP_GAIN               0x10
 #define MSG_CODE_PICTURE_RATE           0x11
 #define MSG_CODE_PULSER_VOLTAGE         0x12
-#define MSG_CODE_HIVOLT                 0x01
-#define MSG_CODE_LOVOLT                 0x00
 #define MSG_CODE_WAVE_TYPE              0x20
-#define MSG_CODE_COMPRESSION            0x00
-#define MSG_CODE_SHEAR                  0x01
 #define MSG_CODE_DENSITY                0x21
 #define MSG_CODE_E_MU_CALC_METHOD       0x22
-#define MSG_CODE_REVIEW_TEST_NUM        (0x30)
+#define MSG_CODE_REVIEW_TEST_NUM        0x30
 #define MSG_CODE_INITIAL_SETTINGS       0x40
 #define MSG_CODE_WATCHDOG_RESET         0x50
+
 #define MSG_CODE_FILL                   -1//0xFF used decimal for negative number warning
+
+#define MSG_CODE_COMPRESSION            0x00
+#define MSG_CODE_SHEAR                  0x01
+
+#define MSG_CODE_DISTANCE               0x00
+#define MSG_CODE_VELOCITY               0x01
+
+#define MSG_CODE_HIVOLT                 0x01
+#define MSG_CODE_LOVOLT                 0x00
+
 #define MSG_CODE_OFF                    0x00
 #define MSG_CODE_ON                     0x01
 

@@ -83,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
     NewUpload = false;
     Metric =  false;
     MessageReply = false;
+    IsInitialSettings =false;
 
 //single shot timer connects after everyting is loaded.
     QTimer* init_timer = new QTimer(this); //warning about being used?
@@ -1450,7 +1451,9 @@ void MainWindow::SerialCheckPort()
                 Serial->setPortName(portname);
                 r = true;
             }
-        if( r == true ) break;
+            if( r == true ){
+                break;
+            }
         }
     }
     if(r == false){
@@ -1459,6 +1462,7 @@ void MainWindow::SerialCheckPort()
         QMessageBox::information(this ,messageTitle , connected + portname );
         ShowStatusMessage( "Serial Port Found" );
         SerialPortOpen(); // Found the instrument open the port
+        SerialGetInititialSettings(); //get initial settings
     }
 }
 
@@ -1498,12 +1502,62 @@ void MainWindow::SerialDataRecieved()
         CurrentData->AddTest( uploadeddata );
         CreateTestMenus();
     }
+
+    if( IsInitialSettings = true ){
+        SerialParseInitialSettings();
+    }
+
 #ifndef R_DEBUG
     SerialConsole->clear();
 #endif
     SerialConsole->setFocus();
     SerialConsole->moveCursor( QTextCursor::Start );
     NewUpload = false;
+}
+
+/******************************************************************************
+
+  Function: SerialGetInitialSettings
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::SerialGetInititialSettings()
+{
+    QByteArray settings;
+    QByteArray ba_get_settings;
+    ba_get_settings.resize( REMOTE_CTRL_MSG_SIZE );
+    ba_get_settings[0] = REMOTE_CTRL_HEADER; ba_get_settings[1] =  MSG_CODE_INITIAL_SETTINGS;
+    ba_get_settings[2] = MSG_CODE_FILL ;
+    ba_get_settings[3] = MSG_CODE_FILL; ba_get_settings[4] = REMOTE_CTRL_FOOTER;
+    IsInitialSettings = true;
+    SerialPortWriteData( ba_get_settings );
+
+    ShowStatusMessage( tr("Intial Settings Retrieved!" ));
+}
+
+/******************************************************************************
+
+  Function: SerialParseInitialSettings
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::SerialParseInitialSettings()
+{
+    QByteArray settings = Data;
+    const int posnumtesthi = 44;//positon hi byte
+    const int posnumtestlo = 46;//position lo byte
+
+    int numtesthi = int( settings.at( posnumtesthi ) - 0x30 ) * 256; //right shifted
+    int numtestlo = int( settings.at( posnumtestlo ) - 0x30 );
+
+    int numtest = numtesthi + numtestlo;
+
+    IsInitialSettings = false;
+    MessageReply = false;
 }
 
 /******************************************************************************
@@ -1570,7 +1624,11 @@ void MainWindow::SerialPortReadData()
     NewUpload = true;
     const int timeouttime = 200; //200 mSec after the last character it should stop
     QByteArray data = Serial->readAll();
-    SerialConsole->putData( data );
+    if( IsInitialSettings == false){
+        SerialConsole->putData( data );
+    }else{
+        Data.append( data );
+    }
     SerialTimeOut->start( timeouttime );
 }
 
