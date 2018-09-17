@@ -83,7 +83,9 @@ MainWindow::MainWindow(QWidget *parent) :
     NewUpload = false;
     Metric =  false;
     MessageReply = false;
-    IsInitialSettings =false;
+    IsInitialSettings = false;
+    Connected = false;
+    NumSavedTests = 0;
 
 //single shot timer connects after everyting is loaded.
     QTimer* init_timer = new QTimer(this); //warning about being used?
@@ -129,6 +131,13 @@ void MainWindow::CreateActions()
     PlotAct = new QAction(tr("&Plot"), this);
     PlotAct->setStatusTip(tr("Plots the Data Uploaded"));
     connect(PlotAct, &QAction::triggered, this, &MainWindow::MenuActPlot);
+
+    UploadAllAct = new QAction( tr( "Upload &All"), this );
+    UploadAllAct->setStatusTip( tr("Upload All Tests" ));
+    connect( UploadAllAct, &QAction::triggered, this, &MainWindow::MenuActUploadAll);
+    UploadTestAct = new QAction( tr( "Upload &Test"), this );
+    UploadTestAct->setStatusTip( tr("Upload Single Test" ));
+    connect( UploadTestAct, &QAction::triggered, this, &MainWindow::MenuActUploadTest);
 
     TestNumberAct = new QAction(tr("&Test Number"), this);
     TestNumberAct->setStatusTip(tr("Select the Test Number to View"));
@@ -385,6 +394,10 @@ void MainWindow::CreateMenus()
 
     EditMenu = menuBar()->addMenu( tr( "&Edit" ));
     EditMenu->addAction( copyAct );
+
+    UploadMenu = menuBar()->addMenu( tr( "&Upload" ));
+    UploadMenu->addAction( UploadTestAct );
+    UploadMenu->addAction( UploadAllAct );
 
     ToolMenu = menuBar()->addMenu( tr( "&Tool" ));
 
@@ -1354,6 +1367,32 @@ void MainWindow::MenuActUSC()
 
 /******************************************************************************
 
+  Function: MenuActUploadAll()
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::MenuActUploadAll()
+{
+    ShowStatusMessage( "Change to Upload All" );
+}
+
+/******************************************************************************
+
+  Function: MenuActUploadTest()
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::MenuActUploadTest()
+{
+    ShowStatusMessage( "Change to Upload Test" );
+}
+
+/******************************************************************************
+
   Function: MenuActVelocity
 
   Description:
@@ -1460,6 +1499,7 @@ void MainWindow::SerialCheckPort()
         QMessageBox::information(this,messageTitle,noport);
     }else{
         QMessageBox::information(this ,messageTitle , connected + portname );
+        Connected = true;
         ShowStatusMessage( "Serial Port Found" );
         SerialPortOpen(); // Found the instrument open the port
         SerialGetInititialSettings(); //get initial settings
@@ -1500,16 +1540,14 @@ void MainWindow::SerialDataRecieved()
     SerialTimeOut->stop();
     if( MessageReply == false ){
         CurrentData->AddTest( uploadeddata );
+        SerialConsole->clear();
         CreateTestMenus();
     }
 
-    if( IsInitialSettings = true ){
+    if( IsInitialSettings == true ){
         SerialParseInitialSettings();
     }
 
-#ifndef R_DEBUG
-    SerialConsole->clear();
-#endif
     SerialConsole->setFocus();
     SerialConsole->moveCursor( QTextCursor::Start );
     NewUpload = false;
@@ -1555,6 +1593,7 @@ void MainWindow::SerialParseInitialSettings()
     int numtestlo = int( settings.at( posnumtestlo ) - 0x30 );
 
     int numtest = numtesthi + numtestlo;
+    NumSavedTests = numtest;
 
     IsInitialSettings = false;
     MessageReply = false;

@@ -112,6 +112,8 @@ private slots:
     void MenuActSaveDataYes();
     void MenuActSave();
     void MenuActTestNumber();
+    void MenuActUploadTest();
+    void MenuActUploadAll();
     void MenuActUSC();
     void MenuActVelocity();
 
@@ -129,6 +131,9 @@ private:
     bool Metric; //check if in metric mode
     bool MessageReply; //check test data or message reply
     bool IsInitialSettings; //used to check if upload is initial settings
+    bool Connected;
+
+    unsigned NumSavedTests;
 
     struct SerialSettings {
         QString name;
@@ -169,6 +174,7 @@ private:
     QMenu *SavePicMenu;
     QMenu *ToolMenu;
     QMenu *UnitsMenu;
+    QMenu *UploadMenu;
     QMenu *ViewMenu;
     QMenu *VoltMenu;
 
@@ -211,6 +217,8 @@ private:
     QAction *SettingsAct;
     QAction *TestNumberAct;
     QAction *LoVoltAct;
+    QAction *UploadTestAct;
+    QAction *UploadAllAct;
     QAction *USCAct;
     QAction *VelocityAct;
 
