@@ -98,7 +98,6 @@ private slots:
     void MenuActCopy();
     void MenuActHiVolt();
     void MenuActLoVolt();
-    void MenuActMetric();
     void MenuActOpen();
     void MenuActPlot();
     void MenuActPicNo();
@@ -114,7 +113,6 @@ private slots:
     void MenuActTestNumber();
     void MenuActUploadTest();
     void MenuActUploadAll();
-    void MenuActUSC();
     void MenuActVelocity();
 
     void SerialCheckPort();

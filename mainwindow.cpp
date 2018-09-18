@@ -342,25 +342,6 @@ void MainWindow::CreateActions()
     MeasureVelAct->setStatusTip(tr( "Change Material Density" ));
     connect( DensityAct, &QAction::triggered, this, &MainWindow::MenuActDensity );
 
-/*
-    USCAct = new QAction(tr( "US Customary" ), this);
-    USCAct->setStatusTip(tr( "Change to US Customary Units" ));
-    USCAct->setCheckable ( true );
-    USCAct->setChecked( true );
-    connect( USCAct, &QAction::triggered, this, &MainWindow::MenuActUSC );
-
-    MetricAct = new QAction(tr("Metric"), this);
-    MetricAct->setStatusTip(tr("Metric Units"));
-    MetricAct->setCheckable ( true );
-    MetricAct->setChecked( false );
-    connect( MetricAct, &QAction::triggered, this, &MainWindow::MenuActMetric);
-*/
-
-/*
-    UnitsActGrp = new QActionGroup( this );
-    UnitsActGrp->addAction( USCAct );
-    UnitsActGrp->addAction( MetricAct );
-*/
     aboutAct = new QAction( tr("&About"), this);
     aboutAct->setStatusTip( tr("Show the application's About box") );
     connect( aboutAct, &QAction::triggered, this, &MainWindow:: MenuActAbout );
@@ -369,10 +350,9 @@ void MainWindow::CreateActions()
     aboutQtAct->setStatusTip( tr("Show the Qt library's About box") );
     connect( aboutQtAct, &QAction::triggered, qApp, &QApplication::aboutQt );
 
-    connect(Serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-            this, &MainWindow::SerialPortHandleError);
-    connect(Serial, &QSerialPort::readyRead, this, &MainWindow::SerialPortReadData);
-    connect(SerialConsole, &Console::getData, this, &MainWindow::SerialPortWriteData);
+//    connect(Serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+//            this, &MainWindow::SerialPortHandleError);
+//    connect(Serial, &QSerialPort::readyRead, this, &MainWindow::SerialPortReadData);
 }
 
 /******************************************************************************
@@ -541,9 +521,8 @@ void MainWindow::MenuActAmpGain1()
     ba1[2] = AMPLIFIER_GAIN_1_SETTING;
     ba1[3] = MSG_CODE_FILL;
     ba1[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( ba1 );
-
     ShowStatusMessage( "Change to Amplifier Gain 1" );
 }
 
@@ -563,9 +542,8 @@ void MainWindow::MenuActAmpGain5()
     ba5[0] = REMOTE_CTRL_HEADER; ba5[1] =  MSG_CODE_AMP_GAIN;
     ba5[2] = AMPLIFIER_GAIN_5_SETTING;
     ba5[3] = MSG_CODE_FILL; ba5[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( ba5 );
-
     ShowStatusMessage( "Change to Amplifier Gain 5" );
 }
 
@@ -585,9 +563,8 @@ void MainWindow::MenuActAmpGain10()
     ba10[0] = REMOTE_CTRL_HEADER; ba10[1] =  MSG_CODE_AMP_GAIN;
     ba10[2] = AMPLIFIER_GAIN_10_SETTING;
     ba10[3] = MSG_CODE_FILL; ba10[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( ba10 );
-
     ShowStatusMessage( "Change to Amplifier Gain 10" );
 }
 
@@ -608,9 +585,8 @@ void MainWindow::MenuActAmpGain25()
     ba25[2] = AMPLIFIER_GAIN_25_SETTING;
     ba25[3] = MSG_CODE_FILL;
     ba25[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( ba25 );
-
     ShowStatusMessage( "Change to Amplifier Gain 25" );
 }
 
@@ -630,9 +606,8 @@ void MainWindow::MenuActAmpGain50()
     ba50[0] = REMOTE_CTRL_HEADER; ba50[1] =  MSG_CODE_AMP_GAIN;
     ba50[2] = AMPLIFIER_GAIN_50_SETTING;
     ba50[3] = MSG_CODE_FILL; ba50[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( ba50 );
-
     ShowStatusMessage( "Change to Amplifier Gain 50" );
 }
 
@@ -652,9 +627,8 @@ void MainWindow::MenuActAmpGain100()
     ba100[0] = REMOTE_CTRL_HEADER; ba100[1] =  MSG_CODE_AMP_GAIN;
     ba100[2] = AMPLIFIER_GAIN_100_SETTING;
     ba100[3] = MSG_CODE_FILL; ba100[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( ba100 );
-
     ShowStatusMessage( "Change to Amplifier Gain 100" );
 }
 
@@ -674,9 +648,8 @@ void MainWindow::MenuActAmpGain250()
     ba250[0] = REMOTE_CTRL_HEADER; ba250[1] =  MSG_CODE_AMP_GAIN;
     ba250[2] = AMPLIFIER_GAIN_250_SETTING;
     ba250[3] = MSG_CODE_FILL; ba250[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( ba250 );
-
     ShowStatusMessage( "Change to Amplifier Gain 250" );
 }
 
@@ -696,9 +669,8 @@ void MainWindow::MenuActAmpGain500()
     ba500[0] = REMOTE_CTRL_HEADER; ba500[1] =  MSG_CODE_AMP_GAIN;
     ba500[2] = AMPLIFIER_GAIN_500_SETTING;
     ba500[3] = MSG_CODE_FILL; ba500[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( ba500 );
-
     ShowStatusMessage( "Change to Amplifier Gain 500" );
 }
 
@@ -717,7 +689,7 @@ void MainWindow::MenuCaptureRate250()
     bpr250[0] = REMOTE_CTRL_HEADER; bpr250[1] =  MSG_CODE_PICTURE_RATE;
     bpr250[2] = PICTURE_RATE_250MHZ;
     bpr250[3] = MSG_CODE_FILL; bpr250[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpr250 );
     ShowStatusMessage( "Change to Capture Rate 250" );
 }
@@ -737,7 +709,7 @@ void MainWindow::MenuCaptureRate500()
     bpr500[0] = REMOTE_CTRL_HEADER; bpr500[1] =  MSG_CODE_PICTURE_RATE;
     bpr500[2] = PICTURE_RATE_500MHZ;
     bpr500[3] = MSG_CODE_FILL; bpr500[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpr500 );
     ShowStatusMessage( "Change to Capture Rate 500" );
 }
@@ -757,7 +729,7 @@ void MainWindow::MenuCaptureRate1000()
     bpr1000[0] = REMOTE_CTRL_HEADER; bpr1000[1] =  MSG_CODE_PICTURE_RATE;
     bpr1000[2] = PICTURE_RATE_1000MHZ;
     bpr1000[3] = MSG_CODE_FILL; bpr1000[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpr1000 );
     ShowStatusMessage( "Change to Capture Rate 1000" );
 }
@@ -777,7 +749,7 @@ void MainWindow::MenuCaptureRate2000()
     bpr2000[0] = REMOTE_CTRL_HEADER; bpr2000[1] =  MSG_CODE_PICTURE_RATE;
     bpr2000[2] = PICTURE_RATE_2000MHZ;
     bpr2000[3] = MSG_CODE_FILL; bpr2000[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpr2000 );
     ShowStatusMessage( "Change to Capture Rate 2000" );
 }
@@ -827,8 +799,8 @@ void MainWindow::MenuActCycleTime()
     b[2] = (char) returnui;
     b[3] = MSG_CODE_FILL;
     b[4] = REMOTE_CTRL_FOOTER;
+    MessageReply = true;
     SerialPortWriteData( b );
-
     ShowStatusMessage( "Change to Measure Distance" );
 }
 
@@ -873,8 +845,8 @@ void MainWindow::MenuActDensity()
     b[2] = (char) ( returnui / top_byte_divisor );
     b[3] = (char) ( returnui % top_byte_divisor );
     b[4] = REMOTE_CTRL_FOOTER;
+    MessageReply = true;
     SerialPortWriteData( b );
-
     ShowStatusMessage( "Change to Measure Distance" );
 }
 
@@ -893,9 +865,8 @@ void MainWindow::MenuActHiVolt()
     bvolthi[0] = REMOTE_CTRL_HEADER; bvolthi[1] =  MSG_CODE_PULSER_VOLTAGE;//??
     bvolthi[2] = MSG_CODE_HIVOLT ;
     bvolthi[3] = MSG_CODE_FILL; bvolthi[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bvolthi );
-
     ShowStatusMessage( "Change to Hi Voltage" );
 }
 
@@ -914,9 +885,8 @@ void MainWindow::MenuActLoVolt()
     bvoltlo[0] = REMOTE_CTRL_HEADER; bvoltlo[1] =  MSG_CODE_PULSER_VOLTAGE;//??
     bvoltlo[2] = MSG_CODE_LOVOLT;
     bvoltlo[3] = MSG_CODE_FILL; bvoltlo[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bvoltlo );
-
     ShowStatusMessage( "Change to Lo Voltage" );
 }
 
@@ -977,24 +947,11 @@ void MainWindow::MenuActDistance()
     bdistance[2] = (char) ( returnui / top_byte_divisor );
     bdistance[3] = (char) ( returnui % top_byte_divisor );
     bdistance[4] = REMOTE_CTRL_FOOTER;
+    MessageReply = true;
     SerialPortWriteData( bdistance );
-
     ShowStatusMessage( "Change to Measure Distance" );
 }
 
-/******************************************************************************
-
-  Function: MenuActMetric
-
-  Description:
-  ============
-
-******************************************************************************/
-void MainWindow::MenuActMetric()
-{
-    Metric = false;
-    ShowStatusMessage( "Change to Metric Units" );
-}
 
 /******************************************************************************
 
@@ -1103,9 +1060,8 @@ void MainWindow::MenuActPicNo()
     bpsf[0] = REMOTE_CTRL_HEADER; bpsf[1] =  MSG_CODE_DISPLAY_SIG;//??
     bpsf[2] = MSG_CODE_OFF;
     bpsf[3] = MSG_CODE_FILL; bpsf[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpsf );
-
     ShowStatusMessage( tr("Save Picture No" ));
 }
 
@@ -1125,9 +1081,8 @@ void MainWindow::MenuActPicYes()
     bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_DISPLAY_SIG;//??
     bpst[2] = MSG_CODE_ON;
     bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpst );
-
     ShowStatusMessage( tr("Save Picture Yes" ));
 }
 
@@ -1147,7 +1102,7 @@ void MainWindow::MenuActPulse1()
     bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_PULSE_FREQ;
     bpst[2] = PULSES_PER_SEQ_1;
     bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpst );
     ShowStatusMessage( tr( "Change Pulse to 1" ));
 }
@@ -1168,7 +1123,7 @@ void MainWindow::MenuActPulse3()
     bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_PULSE_FREQ;
     bpst[2] = PULSES_PER_SEQ_3;
     bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpst );
     ShowStatusMessage( tr( "Change Pulse to 3" ));
 }
@@ -1189,7 +1144,7 @@ void MainWindow::MenuActPulse10()
     bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_PULSE_FREQ;
     bpst[2] = PULSES_PER_SEQ_10;
     bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpst );
     ShowStatusMessage( tr( "Change Pulse to 10" ));
 }
@@ -1210,7 +1165,7 @@ void MainWindow::MenuActRunNo()
     bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_RUN_A_TEST;//??
     bpst[2] = MSG_CODE_OFF;
     bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpst );
     ShowStatusMessage( tr( "Run No" ));
 }
@@ -1231,7 +1186,7 @@ void MainWindow::MenuActRunYes()
     bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_RUN_A_TEST;//??
     bpst[2] = MSG_CODE_ON;
     bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bpst );
     ShowStatusMessage( tr("Run Yes" ));
 }
@@ -1252,9 +1207,8 @@ void MainWindow::MenuActSaveDataNo()
     bdsf[0] = REMOTE_CTRL_HEADER; bdsf[1] =  MSG_CODE_SAVE_TEST;
     bdsf[2] = MSG_CODE_OFF;
     bdsf[3] = MSG_CODE_FILL; bdsf[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bdsf );
-
     ShowStatusMessage( tr( "Save No" ));
 }
 
@@ -1274,9 +1228,8 @@ void MainWindow::MenuActSaveDataYes()
     bdst[0] = REMOTE_CTRL_HEADER; bdst[1] =  MSG_CODE_SAVE_TEST;
     bdst[2] = MSG_CODE_ON;
     bdst[3] = MSG_CODE_FILL; bdst[4] = REMOTE_CTRL_FOOTER;
-
+    MessageReply = true;
     SerialPortWriteData( bdst );
-
     ShowStatusMessage( tr( "Save Yes" ));
 }
 
@@ -1351,19 +1304,6 @@ void MainWindow::MenuActTestNumber()
     SerialConsole->moveCursor( QTextCursor::Start );
     ShowStatusMessage( tr( "Select Test Number" ));
 }
-/******************************************************************************
-
-  Function: MenuActUSC
-
-  Description:
-  ============
-
-******************************************************************************/
-void MainWindow::MenuActUSC()
-{
-    Metric = false;
-    ShowStatusMessage( "Change to US Customary Units" );
-}
 
 /******************************************************************************
 
@@ -1375,6 +1315,7 @@ void MainWindow::MenuActUSC()
 ******************************************************************************/
 void MainWindow::MenuActUploadAll()
 {
+
     ShowStatusMessage( "Change to Upload All" );
 }
 
@@ -1388,6 +1329,29 @@ void MainWindow::MenuActUploadAll()
 ******************************************************************************/
 void MainWindow::MenuActUploadTest()
 {
+    QString input_prompt= QString( tr( "Please Select a Test between 1 and %1 ").arg( NumSavedTests ));
+    unsigned int test_selected;
+    bool ok = false;
+
+    test_selected = QInputDialog::getInt( this, tr("Upload Test"),
+                  input_prompt, 1, 1, NumSavedTests, 1, &ok );
+    if(ok){
+
+        QMessageBox::information( this, tr( "Upload Test" ),
+           ( QString( tr("Test Number %1 ")).arg( test_selected )));
+
+        QByteArray btest;
+        const unsigned top_byte_divisor = 0x100; //divide by this to get the top byte
+
+        btest.resize( REMOTE_CTRL_MSG_SIZE ); // this section not working
+        btest[0] = REMOTE_CTRL_HEADER;
+        btest[1] = MSG_CODE_REVIEW_TEST_NUM;
+        btest[2] = (char) ( test_selected / top_byte_divisor );
+        btest[3] = (char) ( test_selected % top_byte_divisor );
+        btest[4] = REMOTE_CTRL_FOOTER;
+        SerialPortWriteData( btest );
+    }
+
     ShowStatusMessage( "Change to Upload Test" );
 }
 
@@ -1449,8 +1413,8 @@ void MainWindow::MenuActVelocity()
     bdistance[2] = (char) ( returnui / top_byte_divisor );
     bdistance[3] = (char) ( returnui % top_byte_divisor );
     bdistance[4] = REMOTE_CTRL_FOOTER;
+    MessageReply = true;
     SerialPortWriteData( bdistance );
-
     ShowStatusMessage( "Change to Measure Velocity" );
 }
 
@@ -1521,7 +1485,6 @@ void MainWindow::SerialCreateActions()
             SLOT(SerialPortHandleError(QSerialPort::SerialPortError)));
     connect(Serial, SIGNAL(readyRead()), this, SLOT(SerialPortReadData()));
     connect(SerialTimeOut,SIGNAL(timeout()), this, SLOT( SerialDataRecieved() ));
-
 }
 
 /******************************************************************************
@@ -1570,10 +1533,11 @@ void MainWindow::SerialGetInititialSettings()
     ba_get_settings[2] = MSG_CODE_FILL ;
     ba_get_settings[3] = MSG_CODE_FILL; ba_get_settings[4] = REMOTE_CTRL_FOOTER;
     IsInitialSettings = true;
+    MessageReply = true;
     SerialPortWriteData( ba_get_settings );
-
     ShowStatusMessage( tr("Intial Settings Retrieved!" ));
 }
+
 
 /******************************************************************************
 
@@ -1682,7 +1646,7 @@ void MainWindow::SerialPortReadData()
 ******************************************************************************/
 void MainWindow::SerialPortWriteData(const QByteArray &data)
 {
-    MessageReply = true;
+//    MessageReply = true;
     NewUpload = false;
     const int reviewtestnumsec = 5;
     const int sec = 2;
