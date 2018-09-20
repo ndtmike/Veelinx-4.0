@@ -132,9 +132,6 @@ void MainWindow::CreateActions()
     PlotAct->setStatusTip(tr("Plots the Data Uploaded"));
     connect(PlotAct, &QAction::triggered, this, &MainWindow::MenuActPlot);
 
-    UploadAllAct = new QAction( tr( "Upload &All"), this );
-    UploadAllAct->setStatusTip( tr("Upload All Tests" ));
-    connect( UploadAllAct, &QAction::triggered, this, &MainWindow::MenuActUploadAll);
     UploadTestAct = new QAction( tr( "Upload &Test"), this );
     UploadTestAct->setStatusTip( tr("Upload Single Test" ));
     connect( UploadTestAct, &QAction::triggered, this, &MainWindow::MenuActUploadTest);
@@ -377,7 +374,6 @@ void MainWindow::CreateMenus()
 
     UploadMenu = menuBar()->addMenu( tr( "&Upload" ));
     UploadMenu->addAction( UploadTestAct );
-    UploadMenu->addAction( UploadAllAct );
 
     ToolMenu = menuBar()->addMenu( tr( "&Tool" ));
 
@@ -477,7 +473,6 @@ void MainWindow::CreateTestMenus()
 
         ViewMenu->addAction( TestNumberAct );
     }
-
 }
 
 /******************************************************************************
@@ -1303,20 +1298,6 @@ void MainWindow::MenuActTestNumber()
     SerialConsole->setFocus();
     SerialConsole->moveCursor( QTextCursor::Start );
     ShowStatusMessage( tr( "Select Test Number" ));
-}
-
-/******************************************************************************
-
-  Function: MenuActUploadAll()
-
-  Description:
-  ============
-
-******************************************************************************/
-void MainWindow::MenuActUploadAll()
-{
-
-    ShowStatusMessage( "Change to Upload All" );
 }
 
 /******************************************************************************

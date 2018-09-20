@@ -112,7 +112,6 @@ private slots:
     void MenuActSave();
     void MenuActTestNumber();
     void MenuActUploadTest();
-    void MenuActUploadAll();
     void MenuActVelocity();
 
     void SerialCheckPort();
@@ -155,6 +154,7 @@ private:
     void SerialCreateActions();
     void SerialGetInititialSettings();
     void SerialParseInitialSettings();
+//    void UploadAll(); //function keeps the upload count going
 
     SerialSettings CurrentSerialSettings;
 
