@@ -1,9 +1,9 @@
 ################################################################
-# Rebarlinx
+# Veelinx
 # Copyright (C) 2018   Michael W Hoag
 #
 # This library is free software; you can redistribute it and/or
-# modify it under the terms of the Rebarlinx License, Version 1.0
+# modify it under the terms of the Veelinx License, Version 1.0
 ################################################################
 include( veelinxconfig.pri )
 
