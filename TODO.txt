@@ -63,3 +63,10 @@ save and read to file - done
 8. As we discussed before you left, there is NO upload data option in the Tools drop down list. The unit does upload data manually one at a time &/or everything at once. I didn't try saving this data stream... and how it gets saved. Is it in individual files, or just one really large file??? Maybe that's the next thing to try.
 
  - I can't find the ability to do this in the code that we have on the server...the command to do this is missing.
+
+
+Save File is not working
+
+Upload Single Test and Upload all tests needs to work as well.
+
+Double check units on Velocity and Distance

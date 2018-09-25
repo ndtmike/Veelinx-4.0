@@ -1309,12 +1309,13 @@ void MainWindow::MenuActTestNumber()
 ******************************************************************************/
 void MainWindow::MenuActUploadTest()
 {
-    QString input_prompt= QString( tr( "Please Select a Test between 1 and %1 ").arg( NumSavedTests ));
+    const int maxtests = 1500;
+    QString input_prompt= QString( tr( "Please Select a Test between 1 and %1 ").arg( maxtests ));
     unsigned int test_selected;
     bool ok = false;
 
     test_selected = QInputDialog::getInt( this, tr("Upload Test"),
-                  input_prompt, 1, 1, NumSavedTests, 1, &ok );
+                  input_prompt, 1, 1, maxtests, 1, &ok );
     if(ok){
 
         QMessageBox::information( this, tr( "Upload Test" ),
@@ -1364,16 +1365,16 @@ void MainWindow::MenuActVelocity()
                       MAT_TRAVEL_DIST_MAX ,
                       0, &ok );
         if(ok) QMessageBox::information( this, tr( "Distance" ),
-               ( QString("The Distance is %1 feet").arg( distance )));
+               ( QString("The Distance is %1 Inches").arg( distance )));
     }else{
         distance = QInputDialog::getDouble( this, tr("Distance"),
-                      tr("Requires a Value Between 0.003 and 15 meters per second"),
+                      tr("Requires a Value Between 0.003 and 15 meters"),
                       dvaluemetric ,
                       MAT_TRAVEL_DIST_MIN_MET * scaler,
                       MAT_TRAVEL_DIST_MAX_MET * scaler,
                       0, &ok );
         if(ok) QMessageBox::information( this, tr("Distance"),
-               ( QString("The Distance is %1 meters/second").arg( distance )));
+               ( QString("The Distance is %1 meters").arg( distance )));
     }
 
     distance *= 10.0;
@@ -1489,7 +1490,10 @@ void MainWindow::SerialDataRecieved()
 
     if( IsInitialSettings == true ){
         SerialParseInitialSettings();
+        MessageReply = false;
     }
+
+    MessageReply = false; //message is setting
 
     SerialConsole->setFocus();
     SerialConsole->moveCursor( QTextCursor::Start );

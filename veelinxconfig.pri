@@ -8,7 +8,7 @@
 
 VEE_VER_MAJ      = 4
 VEE_VER_MIN      = 2
-VEE_VER_PAT      = 0
+VEE_VER_PAT      = 1
 VEE_VERSION      = $${REE_VER_MAJ}.$${REE_VER_MIN}.$${REE_VER_PAT}
 
 DEFINES += VERSION_MAJOR="$$VEE_VER_MAJ"\
